@@ -1,0 +1,10 @@
+pymupdf
+pytesseract
+pillow
+openai
+google-cloud-storage
+google-cloud-secret-manager
+google-cloud-firestore
+cryptography
+python-dateutil
+ollama

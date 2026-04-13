@@ -1,0 +1,7 @@
+*.json
+*.pdf
+*.md
+logs/
+applications/
+pdf_to_markdown.py
+__pycache__/
