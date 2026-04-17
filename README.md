@@ -20,6 +20,7 @@ For each immigration application folder, the pipeline:
 
 ```
 PipelineScriptsTMF-main/
+├── config.py              # ← Edit this before each run: RUNPOD_URL and RUNPOD_MODEL
 ├── setup.py               # Run once — installs deps, creates dirs, downloads parser
 ├── run_all.py             # Run each time — processes all applications end to end
 ├── pipeline.py            # Core logic: client setup, PDF parsing, LLM extraction, Firestore save
@@ -144,15 +145,27 @@ Called automatically at the end of Step 3:
 
 ## Configuration
 
-All config is at the top of `pipeline.py` and `setup.py`:
+### LLM endpoint (`config.py`)
+
+`RUNPOD_URL` and `RUNPOD_MODEL` live in **`config.py`** — the only file you need to edit between runs when you spin up a new RunPod pod:
+
+```python
+# config.py
+RUNPOD_URL   = "https://<your-pod-id>-11434.proxy.runpod.net/"
+RUNPOD_MODEL = "org/qwen2.5-1m:14b"
+```
+
+Both `pipeline.py` and `naming.py` import from this file, so changing it here propagates everywhere automatically.
+
+### Other constants
+
+All remaining config is at the top of `pipeline.py` and `setup.py`:
 
 | Variable | Value |
 |---|---|
 | `GCP_PROJECT` | `data-enclave-dev-488920` |
 | `FIREBASE_BUCKET` | `moonlit-balm-489206-i9.firebasestorage.app` |
 | `FIRESTORE_DB` | `llm-output` |
-| `RUNPOD_URL` | RunPod inference endpoint |
-| `RUNPOD_MODEL` | `Qwen/Qwen2.5-14B-Instruct-1M-AWQ` |
 
 ---
 

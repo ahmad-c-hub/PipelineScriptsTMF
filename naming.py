@@ -1,5 +1,6 @@
 
 import os, json
+from config import RUNPOD_MODEL
 
 NAMING_PROMPT = """You are a document classifier for US immigration case files.
 
@@ -62,7 +63,7 @@ def normalize_application(app_folder, client):
 
     prompt   = NAMING_PROMPT.format(filenames_list="\n".join(f"- {f}" for f in raw_files))
     response = client.generate(
-        model='org/qwen2.5-1m:14b',
+        model=RUNPOD_MODEL,
         prompt=prompt,
         stream=False,
         options={"temperature": 0, "num_predict": 1000}

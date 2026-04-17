@@ -5,10 +5,7 @@ from openai import OpenAI
 import ollama
 from google.oauth2 import service_account
 from google.cloud import storage as gcs, secretmanager, firestore
-
-# ── CONFIG ────────────────────────────────────────────────────
-RUNPOD_URL   = "https://s70wgsir2yx37v-11434.proxy.runpod.net/"
-RUNPOD_MODEL = "Qwen/Qwen2.5-14B-Instruct-1M-AWQ"
+from config import RUNPOD_URL, RUNPOD_MODEL
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -362,7 +359,7 @@ def run_page(prompt, page_text, page_idx, doc_type):
     print(f"[{doc_type}] Page {page_idx} → sending...")
     start = time.time()
     response = client.generate(
-        model='org/qwen2.5-1m:14b',
+        model=RUNPOD_MODEL,
         prompt=full_prompt,
         stream=False,
         options={"temperature": 0, "num_predict": 2000}
@@ -484,7 +481,7 @@ def run_pipeline(all_markdowns):
     firestore_client.collection("insights").document(run_id).set({
         "run_id":    run_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "model":     "Qwen/Qwen2.5-14B-Instruct-AWQ",
+        "model":     RUNPOD_MODEL,
         "applications": all_results,
         "total_fields_extracted": sum(len(v) for v in all_results.values())
     })
@@ -499,7 +496,7 @@ def run_pipeline(all_markdowns):
     agg  = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(agg)
 
-    agg.transform_and_save(firestore_client, run_id, all_results, "Qwen/Qwen2.5-14B-Instruct-AWQ")
-    agg.aggregate_and_save(firestore_client, run_id, "Qwen/Qwen2.5-14B-Instruct-AWQ")
+    agg.transform_and_save(firestore_client, run_id, all_results, RUNPOD_MODEL)
+    agg.aggregate_and_save(firestore_client, run_id, RUNPOD_MODEL)
 
     return all_results
