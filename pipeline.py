@@ -10,18 +10,17 @@ from google.cloud import storage as gcs, secretmanager, firestore
 RUNPOD_URL   = "https://s70wgsir2yx37v-11434.proxy.runpod.net/"
 RUNPOD_MODEL = "Qwen/Qwen2.5-14B-Instruct-1M-AWQ"
 
-COLAB_KEY_PATH   = "/content/colab-key-new.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+COLAB_KEY_PATH   = os.path.join(BASE_DIR, "colab-key-new.json")
 GCP_PROJECT      = "data-enclave-dev-488920"
 FIREBASE_BUCKET  = "moonlit-balm-489206-i9.firebasestorage.app"
 SECRET_NAME      = f"projects/{GCP_PROJECT}/secrets/enclave-aes-key/versions/latest"
 FIRESTORE_DB     = "llm-output"
 
-APPLICATIONS_DIR = "/content/pipeline/applications"
-PDF_TO_MD_SCRIPT = "/content/pipeline/pdf_to_markdown.py"
-LOG_DIR          = "/content/pipeline/logs"
-
-os.makedirs(APPLICATIONS_DIR, exist_ok=True)
-os.makedirs(LOG_DIR, exist_ok=True)
+APPLICATIONS_DIR = os.path.join(BASE_DIR, "applications")
+PDF_TO_MD_SCRIPT = os.path.join(BASE_DIR, "pdf_to_markdown.py")
+LOG_DIR          = os.path.join(BASE_DIR, "logs")
 
 # ── CLIENTS ───────────────────────────────────────────────────
 with open(COLAB_KEY_PATH) as f:
@@ -39,17 +38,6 @@ print("✓ All clients ready.")
 print(f"  RunPod : {RUNPOD_URL}")
 print(f"  Model  : {RUNPOD_MODEL}")
 print(f"  GCP    : {GCP_PROJECT}")
-
-# ── DOWNLOAD PARSER ───────────────────────────────────────────
-bucket = gcs_client.bucket(FIREBASE_BUCKET)
-print("Downloading parser...")
-bucket.blob("pipeline/pdf_to_markdown.py").download_to_filename(PDF_TO_MD_SCRIPT)
-print(f"✓ Parser saved to {PDF_TO_MD_SCRIPT}")
-result = subprocess.run(
-    ["python", "-c", f"import ast; ast.parse(open('{PDF_TO_MD_SCRIPT}').read()); print('Syntax OK')"],
-    capture_output=True, text=True
-)
-print(f"  {result.stdout.strip() or result.stderr.strip()}")
 
 # ── PROMPTS ───────────────────────────────────────────────────
 PROMPT_PETITION = """
@@ -300,6 +288,25 @@ def run_parser(pdf_path):
         return f.read()
 
 
+def build_app_markdowns(app_name, app_folder):
+    """Parse all PDFs in a single application folder → {doc_type: markdown_text}."""
+    print(f"\n[{app_name}] Parsing documents:")
+    docs_md = {}
+    for f in sorted(os.listdir(app_folder)):
+        if not f.lower().endswith(".pdf"):
+            continue
+        doc_type = f.replace(".pdf", "")
+        pdf_path = os.path.join(app_folder, f)
+        try:
+            md_text = run_parser(pdf_path)
+            docs_md[doc_type] = md_text
+            print(f"  {doc_type:20s} → {md_text.count('## Page')} pages, {len(md_text):,} chars")
+        except Exception as e:
+            print(f"  {doc_type:20s} → ERROR: {e}")
+            docs_md[doc_type] = None
+    return docs_md
+
+
 def build_markdowns(applications_dir):
     all_markdowns = {}
     for app_name in sorted(os.listdir(applications_dir)):
@@ -308,21 +315,7 @@ def build_markdowns(applications_dir):
         app_folder = os.path.join(applications_dir, app_name)
         if not os.path.isdir(app_folder):
             continue
-        print(f"\n[{app_name}] Parsing documents:")
-        docs_md = {}
-        for f in sorted(os.listdir(app_folder)):
-            if not f.lower().endswith(".pdf"):
-                continue
-            doc_type = f.replace(".pdf", "")
-            pdf_path = os.path.join(app_folder, f)
-            try:
-                md_text = run_parser(pdf_path)
-                docs_md[doc_type] = md_text
-                print(f"  {doc_type:20s} → {md_text.count('## Page')} pages, {len(md_text):,} chars")
-            except Exception as e:
-                print(f"  {doc_type:20s} → ERROR: {e}")
-                docs_md[doc_type] = None
-        all_markdowns[app_name] = docs_md
+        all_markdowns[app_name] = build_app_markdowns(app_name, app_folder)
     print("\nMarkdowns ready:")
     for app, docs in all_markdowns.items():
         print(f"\n  {app}:")
@@ -502,7 +495,7 @@ def run_pipeline(all_markdowns):
     print(f"Saved → Firestore (run_id={run_id})")
 
     # ── Transform + Aggregate ─────────────────────────────────
-    spec = importlib.util.spec_from_file_location("aggregate", "/content/pipeline/aggregate.py")
+    spec = importlib.util.spec_from_file_location("aggregate", os.path.join(BASE_DIR, "aggregate.py"))
     agg  = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(agg)
 
