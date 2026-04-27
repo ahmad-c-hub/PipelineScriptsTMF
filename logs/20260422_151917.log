@@ -1,0 +1,9 @@
+✓ All clients ready.
+  RunPod : https://b0s3h7rcgadih6-11434.proxy.runpod.net/
+  Model  : qwen2.5:14b-instruct-q8_0
+  GCP    : data-enclave-dev-488920
+============================================================
+STEP 0b: Fetching applications from GCS
+============================================================
+Applications in GCS: application-001, application-002
+Downloading 2 application(s)...

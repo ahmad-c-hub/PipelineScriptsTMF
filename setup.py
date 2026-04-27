@@ -40,7 +40,7 @@ LOG_DIR          = os.path.join(BASE_DIR, "logs")
 print("="*60)
 print("STEP 2: Creating directories")
 print("="*60)
-for d in [APPLICATIONS_DIR, LOG_DIR, os.path.dirname(PDF_TO_MD_SCRIPT)]:
+for d in [APPLICATIONS_DIR, LOG_DIR]:
     os.makedirs(d, exist_ok=True)
     print(f"✓ {d}")
 print()

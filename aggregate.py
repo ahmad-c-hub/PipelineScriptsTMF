@@ -37,9 +37,28 @@ def to_bool(val):
 # ── STEP 1: TRANSFORM insights → aggregated_cases ─────────────
 
 def transform_and_save(firestore_client, run_id, all_results, model_name):
-    print(f"\n[aggregate] Transforming {len(all_results)} app(s) → aggregated_cases...")
+    # Build full snapshot: ALL apps from processed_applications + this run's results
+    snap = firestore_client.collection("processed_applications").get()
+    combined = {}
+    for doc in snap:
+        app_key = doc.id
+        data = doc.to_dict()
+        fields = dict(data.get("fields", {}))
+        doc_types = data.get("processed_docs", [])
+        # Derive flags from doc types (not stored back in processed_applications)
+        fields["rfe_linked_to_evidence_issue"]  = any(k.startswith("rfe")  for k in doc_types)
+        fields["noid_linked_to_evidence_issue"] = any(k.startswith("noid") for k in doc_types)
+        fields["_doc_types"] = sorted(doc_types)
+        combined[app_key] = fields
 
+    # Override with current run's all_results — freshest data + accurate derived flags
     for app_key, raw in all_results.items():
+        combined[app_key] = raw
+
+    print(f"\n[aggregate] Transforming {len(combined)} app(s) → aggregated_cases "
+          f"({len(all_results)} this run + {len(combined) - len(all_results)} historical)...")
+
+    for app_key, raw in combined.items():
 
         # ── Doc types attached by pipeline cell ───────────────
         doc_types = raw.get("_doc_types", [])
@@ -153,8 +172,12 @@ def aggregate_and_save(firestore_client, run_id, model_name):
             m = {}
             for d in docs:
                 v = d.get(field)
-                if v is not None:
-                    m[v] = m.get(v, 0) + 1
+                if v is None:
+                    continue
+                items = v if isinstance(v, list) else [v]
+                for item in items:
+                    if item is not None:
+                        m[item] = m.get(item, 0) + 1
             return [
                 {"label": k, "count": v, "pct": pct(v)}
                 for k, v in sorted(m.items(), key=lambda x: -x[1])

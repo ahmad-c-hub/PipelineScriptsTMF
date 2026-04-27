@@ -1,5 +1,5 @@
 
-import re, json, time, os, subprocess, importlib.util
+import re, json, time, os, subprocess, importlib.util, yaml
 from datetime import datetime, timezone
 from openai import OpenAI
 import ollama
@@ -37,242 +37,14 @@ print(f"  Model  : {RUNPOD_MODEL}")
 print(f"  GCP    : {GCP_PROJECT}")
 
 # ── PROMPTS ───────────────────────────────────────────────────
-PROMPT_PETITION = """
-You are an immigration document analyst. You will be given the text of an immigration petition (Form I-129 or I-140).
+_PROMPTS_PATH = os.path.join(BASE_DIR, "insight_prompts.yaml")
+with open(_PROMPTS_PATH, "r", encoding="utf-8") as _f:
+    _PROMPTS = yaml.safe_load(_f)
 
-Extract the following fields and return ONLY a valid JSON object with snake_case keys. If a field is not found or not determinable, set its value to null.
-
-Fields to extract:
-{
-  "petition_type": "string (e.g. O-1A, EB-1A, EB-2 NIW)",
-  "filing_date": "YYYY-MM-DD",
-  "service_center_or_field_office": "string",
-  "premium_processing": "Y | N | Unknown",
-  "employer_sponsored": true | false,
-  "self_petition": true | false,
-  "beneficiary_country_of_birth": "string",
-  "beneficiary_country_of_citizenship": "string",
-  "beneficiary_industry": "Tech | Pharmaceutical | Academic | Financial | Manufacturing | Other",
-  "criteria_claimed_count": integer,
-  "major_award_claimed": "Y | N",
-  "publications_included": "Y | N",
-  "judging_others_work_claimed": "Y | N",
-  "high_salary_claimed": "Y | N",
-  "eb2_basis": "Advanced Degree | Exceptional Ability"
-  "endeavor_field": "Health | Energy | Tech | Public Policy | Other"
-  }
-Document:
-"""
-
-PROMPT_DECISION = """
-You are analyzing a USCIS decision notice.
-
-This is NOT a form — only narrative text.
-
-INSTRUCTIONS:
-- Scan entire text for key signals
-- DO NOT infer missing values
-- Extract ONLY explicit information
-- Return ONLY JSON
-
-KEY PATTERNS:
-
-decision_date:
-  Look for:
-  - Notice Date
-  - Date at top of letter
-
-final_outcome:
-  Approved → approval notice
-  Denied → denial notice
-  Withdrawn → explicitly stated
-
-officer_number:
-  Look for ANY of these patterns:
-  - "Officer:" followed by a number or code
-  - "Adjudicator:" followed by a number or code
-  - "Officer ID:" or "ID:" in a stamp or signature block
-  - A standalone alphanumeric code near a signature (e.g. "A12345678")
-  - Initials + number combinations in the footer or header
-  If found, return the exact code/number as a string.
-  If not found, return null.
-
-rfe_issued:
-  true if "Request for Evidence" is explicitly mentioned
-  false otherwise
-
-noid_issued:
-  true if "Notice of Intent to Deny" is explicitly mentioned
-  false otherwise
-
-rfe_basis:
-  Only fill if rfe_issued is true.
-  Extract the MAIN stated reason for the RFE. Choose ONE:
-    "Lack of independent corroboration"
-    "Evidence insufficient"
-    "Lack of originality"
-    "General claims"
-    "Evidence does not meet legal standard"
-    "Overreliance on expert letters"
-    "Other"
-  If rfe_issued is false, return null.
-
-noid_basis:
-  Only fill if noid_issued is true.
-  Extract the MAIN stated reason for the NOID. Choose ONE:
-    "Lack of independent corroboration"
-    "Evidence insufficient"
-    "Lack of originality"
-    "General claims"
-    "Evidence does not meet legal standard"
-    "Inconsistencies or contradictions"
-    "Other"
-  If noid_issued is false, return null.
-
-basis_for_approval:
-  Extract key justification text if approved.
-
-primary_basis_for_decision:
-  Choose ONE:
-    Major Award
-    High Salary
-    Publications
-    Judging
-    Critical Role
-    Other
-
-discretion_applied:
-  true if language like "in our discretion" or "USCIS determines" appears.
-
-outcome_after_rfe:
-  If rfe_issued is true, what was the final outcome after the RFE response?
-  "approved" | "denied" | null
-
-outcome_after_noid:
-  If noid_issued is true, what was the final outcome after the NOID response?
-  "approved" | "denied" | null
-
-Return EXACT JSON:
-{
-  "decision_date": null,
-  "final_outcome": null,
-  "officer_number": null,
-  "rfe_issued": null,
-  "noid_issued": null,
-  "rfe_basis": null,
-  "noid_basis": null,
-  "basis_for_approval": null,
-  "primary_basis_for_decision": null,
-  "discretion_applied": null,
-  "outcome_after_rfe": null,
-  "outcome_after_noid": null
-}
-
-Document:
-"""
-
-PROMPT_EVIDENCE = """
-You are analyzing a LARGE USCIS evidence package (hundreds of pages).
-
-IMPORTANT:
-- This is NOT a form
-- This is NOT structured
-- You MUST scan for SIGNALS, not summarize
-
-VERY IMPORTANT LOGIC:
-
-Two fields are NOT derived from the evidence text:
-
-- rfe_linked_to_evidence_issue
-- noid_linked_to_evidence_issue
-
-These are determined externally:
-
-- If an RFE document exists in the application → rfe_linked_to_evidence_issue = true
-- If no RFE document exists → false
-
-- If a NOID document exists in the application → noid_linked_to_evidence_issue = true
-- If no NOID document exists → false
-
-You will be given these flags explicitly:
-
-RFE_PRESENT: __RFE_PRESENT__
-NOID_PRESENT: __NOID_PRESENT__
-
-You MUST:
-- Use these values directly
-- DO NOT infer them from text
-
-────────────────────────────
-
-STRATEGY:
-1. Scan document for keywords and patterns
-2. Detect relevant sections
-3. Extract ONLY final signals
-
-DO NOT:
-- Summarize
-- Copy text
-- Infer anything not clearly stated
-
-────────────────────────────
-
-TARGET SIGNALS:
-
-included_publications:
-  true if you see:
-    - journal articles
-    - conference papers
-    - arXiv / preprints
-    - Google Scholar references
-
-cell_cited:
-  true ONLY if:
-    - "Cell" journal is explicitly mentioned
-
-publication_type:
-  Look at what kind of publications are included.
-  Choose the HIGHEST quality type present:
-    "peer_reviewed_top_tier"     → Cell, Nature, Science, NEJM, Lancet
-    "peer_reviewed_other"        → Any other peer-reviewed journal article
-    "conference_paper"           → Conference proceedings, presented papers
-    "preprint"                   → arXiv, bioRxiv, SSRN, preprints
-    "trade_publication"          → Industry magazines, trade journals
-    "blog_or_whitepaper"         → Blog posts, internal whitepapers, technical memos
-  If no publications: null
-
-basis_for_application:
-  Identify dominant basis from repeated patterns:
-    - Major Award
-    - High Salary
-    - Publications
-    - Judging
-    - Critical Role
-    - Original Contributions
-
-────────────────────────────
-
-FINAL OUTPUT RULES:
-
-- rfe_linked_to_evidence_issue = value of RFE_PRESENT
-- noid_linked_to_evidence_issue = value of NOID_PRESENT
-
-DO NOT change these values.
-
-────────────────────────────
-
-Return EXACT JSON:
-{
-  "included_publications": null,
-  "cell_cited": null,
-  "publication_type": null,
-  "basis_for_application": null,
-  "rfe_linked_to_evidence_issue": null,
-  "noid_linked_to_evidence_issue": null
-}
-
-Document:
-"""
+PROMPT_PETITION = _PROMPTS["petition"]
+PROMPT_DECISION = _PROMPTS["decision"]
+PROMPT_EVIDENCE = _PROMPTS["evidence"]
+PROMPT_RFE      = _PROMPTS["rfe"]
 
 # ── PARSER RUNNER ─────────────────────────────────────────────
 def run_parser(pdf_path):
@@ -285,14 +57,19 @@ def run_parser(pdf_path):
         return f.read()
 
 
-def build_app_markdowns(app_name, app_folder):
-    """Parse all PDFs in a single application folder → {doc_type: markdown_text}."""
+def build_app_markdowns(app_name, app_folder, skip_doc_types=None):
+    """Parse PDFs in app_folder → {doc_type: markdown_text}.
+    skip_doc_types — set of doc types to skip (already in processed_applications)."""
+    skip = set(skip_doc_types or [])
     print(f"\n[{app_name}] Parsing documents:")
     docs_md = {}
     for f in sorted(os.listdir(app_folder)):
         if not f.lower().endswith(".pdf"):
             continue
         doc_type = f.replace(".pdf", "")
+        if doc_type in skip:
+            print(f"  {doc_type:20s} → skipped (already processed)")
+            continue
         pdf_path = os.path.join(app_folder, f)
         try:
             md_text = run_parser(pdf_path)
@@ -366,8 +143,8 @@ def run_page(prompt, page_text, page_idx, doc_type):
     )
     elapsed = time.time() - start
     output  = response['response']
-    input_tokens  = len(full_prompt) // 4
-    output_tokens = len(output) // 4
+    input_tokens  = response.get('prompt_eval_count', 0)
+    output_tokens = response.get('eval_count', 0)
     print(f"[{doc_type}] Page {page_idx} done ({elapsed:.1f}s)")
     return output, elapsed, input_tokens, output_tokens
 
@@ -378,14 +155,10 @@ def process_document(doc_type, md_text, docs):
         prompt = PROMPT_PETITION
     elif doc_type == "decision":
         prompt = PROMPT_DECISION
+    elif doc_type == "rfe":
+        prompt = PROMPT_RFE
     else:
-        rfe_present  = "rfe" in docs
-        noid_present = "noid" in docs
-        prompt = PROMPT_EVIDENCE.replace(
-            "__RFE_PRESENT__",  str(rfe_present).lower()
-        ).replace(
-            "__NOID_PRESENT__", str(noid_present).lower()
-        )
+        prompt = PROMPT_EVIDENCE
 
     merged = {}
     stats  = {"pages": 0, "time": 0, "input_tokens": 0, "output_tokens": 0}
@@ -419,17 +192,104 @@ def process_document(doc_type, md_text, docs):
     return merged, stats
 
 
+# ── GCS APPLICATION FETCHER ───────────────────────────────────
+def list_gcs_applications():
+    """Return sorted list of application folder names found in gs://{bucket}/applications/."""
+    bucket = gcs_client.bucket(FIREBASE_BUCKET)
+    blobs  = gcs_client.list_blobs(bucket, prefix="applications/", delimiter="/")
+    # Consume the iterator so prefixes are populated
+    list(blobs)
+    app_names = []
+    for prefix in blobs.prefixes:
+        # prefix looks like "applications/application-001/"
+        folder = prefix.rstrip("/").split("/")[-1]
+        if folder:
+            app_names.append(folder)
+    return sorted(app_names)
+
+
+def fetch_applications_from_gcs(app_names):
+    """Download PDFs for the given app names from GCS into the local applications/ dir.
+    Clears the local folder first so renamed/parsed files from previous runs don't interfere."""
+    import shutil
+    bucket = gcs_client.bucket(FIREBASE_BUCKET)
+    for app_name in app_names:
+        local_app_dir = os.path.join(APPLICATIONS_DIR, app_name)
+        if os.path.exists(local_app_dir):
+            shutil.rmtree(local_app_dir)
+        os.makedirs(local_app_dir)
+        prefix = f"applications/{app_name}/"
+        blobs  = list(gcs_client.list_blobs(bucket, prefix=prefix))
+        pdfs   = [b for b in blobs if b.name.lower().endswith(".pdf")]
+        if not pdfs:
+            print(f"  [{app_name}] No PDFs found in GCS at {prefix}")
+            continue
+        for blob in pdfs:
+            filename  = blob.name.split("/")[-1]
+            dest_path = os.path.join(local_app_dir, filename)
+            blob.download_to_filename(dest_path)
+            print(f"  [{app_name}] Downloaded: {filename}")
+
+
+# ── PROCESSED APPLICATIONS TABLE ──────────────────────────────
+def get_processed_application(app_name):
+    """
+    Return {"processed_docs": [doc_type, ...], "fields": {merged fields}}
+    for an application, or {"processed_docs": [], "fields": {}} if not found.
+    processed_docs — which document types have been processed (for deduplication).
+    fields         — running merged result of all processed documents.
+    """
+    doc = firestore_client.collection("processed_applications").document(app_name).get()
+    if not doc.exists:
+        return {"processed_docs": [], "fields": {}}
+    data = doc.to_dict()
+    return {
+        "processed_docs": data.get("processed_docs", []),
+        "fields":         data.get("fields", {}),
+    }
+
+
+def update_processed_application(app_name, doc_type, updated_merged_fields, run_id):
+    """
+    After processing a single document type:
+    - Appends doc_type to processed_docs (via ArrayUnion — safe against concurrent writes).
+    - Replaces fields with the latest merged result.
+    Called immediately after each document is processed for crash-safe tracking.
+    """
+    firestore_client.collection("processed_applications").document(app_name).set({
+        "processed_docs": firestore.ArrayUnion([doc_type]),
+        "fields":         updated_merged_fields,
+        "run_id":         run_id,
+        "last_updated":   datetime.now(timezone.utc).isoformat(),
+    }, merge=True)
+    print(f"  → processed_applications/{app_name}: added '{doc_type}'")
+
+
 # ── MAIN RUN LOOP ─────────────────────────────────────────────
 def run_pipeline(all_markdowns):
+    """
+    all_markdowns — {app_name: {doc_type: md_text}}
+    For each app, checks processed_applications in Firestore per document type:
+      - Already processed → reuse stored fields, skip inference
+      - New document      → run inference, save to processed_applications
+    All results (new + reused) are saved together under a new run_id in insights.
+    """
     run_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
 
-    all_results  = {}
-    global_stats = {
+    all_results   = {}
+    all_app_stats = {}
+    global_stats  = {
         "total_pages_processed":    0,
         "total_inference_time_sec": 0,
         "total_input_tokens":       0,
-        "total_output_tokens":      0
+        "total_output_tokens":      0,
     }
+
+    def _accumulate(target, stats):
+        target["pages_processed"]    += stats["pages"]
+        target["inference_time_sec"] += stats["time"]
+        target["input_tokens"]       += stats["input_tokens"]
+        target["output_tokens"]      += stats["output_tokens"]
 
     print(f"\nRUN ID: {run_id}")
     print("="*60)
@@ -437,57 +297,115 @@ def run_pipeline(all_markdowns):
     for app, docs in all_markdowns.items():
         print(f"\nAPPLICATION: {app}")
         print("-"*60)
-        final = {}
 
-        if "petition" in docs:
-            print("\n=== PROCESSING PETITION ===")
-            data, stats = process_document("petition", docs["petition"], docs)
-            print("\nPETITION RESULT:")
+        # Load what has already been processed for this app
+        processed_record = get_processed_application(app)
+        processed_docs   = set(processed_record["processed_docs"])
+
+        if processed_docs:
+            already = [dt for dt in docs if dt in processed_docs]
+            new     = [dt for dt in docs if dt not in processed_docs]
+            print(f"  Already processed ({len(already)}): {already}")
+            print(f"  New documents     ({len(new)}):     {new}")
+        else:
+            print("  No prior record — processing all documents.")
+
+        # Seed final with the stored merged fields from previous runs
+        final     = dict(processed_record["fields"])
+        app_stats = {"pages_processed": 0, "inference_time_sec": 0, "input_tokens": 0, "output_tokens": 0}
+
+        def _process_or_reuse(doc_type, md_text, prompt_key, label):
+            """Returns extracted fields if newly processed, None if reused."""
+            if doc_type in processed_docs:
+                print(f"\n=== REUSING {label} (already in processed_applications) ===")
+                return None
+            print(f"\n=== PROCESSING {label} ===")
+            data, stats = process_document(prompt_key, md_text, docs)
+            print(f"\n{label} RESULT:")
             print(json.dumps(data, indent=2))
-            final.update(data)
-            for k in ("pages","time","input_tokens","output_tokens"):
-                global_stats[f"total_{'pages_processed' if k=='pages' else ('inference_time_sec' if k=='time' else k)}"] += stats[k]
+            _accumulate(app_stats, stats)
+            return data
 
-        if "decision" in docs:
-            print("\n=== PROCESSING DECISION ===")
-            data, stats = process_document("decision", docs["decision"], docs)
-            print("\nDECISION RESULT:")
-            print(json.dumps(data, indent=2))
-            final.update({k: v for k, v in data.items() if k not in final})
-            for k in ("pages","time","input_tokens","output_tokens"):
-                global_stats[f"total_{'pages_processed' if k=='pages' else ('inference_time_sec' if k=='time' else k)}"] += stats[k]
+        # ── Process in priority order; petition overwrites, others fill gaps ──
+        if "petition" in docs and docs["petition"] is not None:
+            data = _process_or_reuse("petition", docs["petition"], "petition", "PETITION")
+            if data is not None:
+                final.update(data)
+                update_processed_application(app, "petition", final, run_id)
 
-        for k, v in docs.items():
-            if k.startswith("evidence"):
-                print("\n=== PROCESSING EVIDENCE ===")
-                data, stats = process_document("evidence", v, docs)
-                print("\nEVIDENCE RESULT:")
-                print(json.dumps(data, indent=2))
+        if "petition_2" in docs and docs["petition_2"] is not None:
+            data = _process_or_reuse("petition_2", docs["petition_2"], "petition", "PETITION_2")
+            if data is not None:
                 final.update({k: v for k, v in data.items() if k not in final})
-                for k in ("pages","time","input_tokens","output_tokens"):
-                    global_stats[f"total_{'pages_processed' if k=='pages' else ('inference_time_sec' if k=='time' else k)}"] += stats[k]
+                update_processed_application(app, "petition_2", final, run_id)
 
-        all_results[app] = final
+        if "rfe" in docs and docs["rfe"] is not None:
+            data = _process_or_reuse("rfe", docs["rfe"], "rfe", "RFE")
+            if data is not None:
+                final.update({k: v for k, v in data.items() if k not in final})
+                update_processed_application(app, "rfe", final, run_id)
+
+        if "decision" in docs and docs["decision"] is not None:
+            data = _process_or_reuse("decision", docs["decision"], "decision", "DECISION")
+            if data is not None:
+                final.update({k: v for k, v in data.items() if k not in final})
+                update_processed_application(app, "decision", final, run_id)
+
+        for doc_type, md_text in docs.items():
+            if doc_type.startswith("evidence") and md_text is not None:
+                data = _process_or_reuse(doc_type, md_text, "evidence", f"EVIDENCE ({doc_type})")
+                if data is not None:
+                    final.update({k: v for k, v in data.items() if k not in final})
+                    update_processed_application(app, doc_type, final, run_id)
+
+        # All doc types = newly parsed + previously processed (for flags and _doc_types)
+        all_known_doc_types = processed_docs | set(docs.keys())
+
+        # Derived flags — always from file presence, not LLM output
+        final["rfe_linked_to_evidence_issue"]  = any(k.startswith("rfe")  for k in all_known_doc_types)
+        final["noid_linked_to_evidence_issue"] = any(k.startswith("noid") for k in all_known_doc_types)
+
+        all_results[app]   = final
+        all_app_stats[app] = app_stats
+
+        print(f"\n=== [{app}] STATS ===")
+        print(f"  Pages processed  : {app_stats['pages_processed']}")
+        print(f"  Inference time   : {app_stats['inference_time_sec']:.1f}s")
+        print(f"  Input tokens     : {app_stats['input_tokens']:,}")
+        print(f"  Output tokens    : {app_stats['output_tokens']:,}")
+        newly_processed = [dt for dt in docs if dt not in processed_docs]
+        print(f"  New docs saved   : {newly_processed or 'none (all reused)'}")
+
         print("\n=== FINAL MERGED RESULT ===")
         print(json.dumps(final, indent=2))
 
-    # ── Attach doc types ──────────────────────────────────────
+        for key in ("pages_processed", "inference_time_sec", "input_tokens", "output_tokens"):
+            global_stats[f"total_{key}"] += app_stats[key]
+
+    # ── Attach doc types (new + previously processed) ─────────
     for app, docs in all_markdowns.items():
         if app in all_results:
-            all_results[app]["_doc_types"] = list(docs.keys())
+            prev = set(get_processed_application(app)["processed_docs"])
+            all_results[app]["_doc_types"] = sorted(prev | set(docs.keys()))
+
+    # ── Only apps with new inference this run ────────────────
+    new_results   = {app: r for app, r in all_results.items()   if all_app_stats[app]["pages_processed"] > 0}
+    new_app_stats = {app: s for app, s in all_app_stats.items() if s["pages_processed"] > 0}
 
     # ── Save to Firestore ─────────────────────────────────────
     print("\nSaving to Firestore...")
+    print(f"  New apps this run: {list(new_results.keys()) or 'none'}")
     firestore_client.collection("insights").document(run_id).set({
-        "run_id":    run_id,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "model":     RUNPOD_MODEL,
-        "applications": all_results,
-        "total_fields_extracted": sum(len(v) for v in all_results.values())
+        "run_id":                run_id,
+        "timestamp":             datetime.now(timezone.utc).isoformat(),
+        "model":                 RUNPOD_MODEL,
+        "applications":          new_results,
+        "total_fields_extracted": sum(len(v) for v in new_results.values()),
     })
     firestore_client.collection("inference_logs").document(run_id).set({
         "run_id": run_id,
-        **global_stats
+        **global_stats,
+        "applications": new_app_stats,
     })
     print(f"Saved → Firestore (run_id={run_id})")
 

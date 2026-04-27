@@ -1,0 +1,369 @@
+petition: |
+  You are an immigration document analyst. You will be given the text of an immigration petition (Form I-129 or I-140).
+
+  PETITION_TYPE_HINT: __PETITION_TYPE_HINT__
+
+  INSTRUCTIONS:
+  - Return ONLY a valid JSON object with snake_case keys
+  - If a field is not found or not determinable, set its value to null
+  - For boolean fields, return true or false — never strings
+  - DO NOT infer. Extract only what is explicitly stated in the document
+
+  PRIMARY FIELDS — always extract these from the petition:
+  {
+    "petition_type": "string (e.g. O-1A, EB-1A, EB-2 NIW)",
+    "filing_date": "YYYY-MM-DD",
+    "service_center_or_field_office": "string",
+    "premium_processing": "Y | N | Unknown",
+    "employer_sponsored": true | false,
+    "self_petition": true | false,
+    "beneficiary_country_of_birth": "string",
+    "beneficiary_country_of_citizenship": "string",
+    "beneficiary_industry": "Tech | Pharmaceutical | Academic | Financial | Manufacturing | Other",
+    "criteria_claimed_count": integer,
+    "major_award_claimed": "Y | N",
+    "publications_included": "Y | N",
+    "judging_others_work_claimed": "Y | N",
+    "high_salary_claimed": "Y | N",
+    "eb2_basis": "Advanced Degree | Exceptional Ability | null",
+    "endeavor_field": "Health | Energy | Tech | Public Policy | Other | null",
+    "national_importance_framing": "Economic | Health | Security | Environmental | null",
+    "evidence_of_positioning_present": true | false | null,
+    "dhanasar_prong_focus": "Prong 1 | Prong 2 | Prong 3 | null"
+  }
+
+  SECONDARY FIELDS — these primarily live in other documents but extract them here
+  if you find them explicitly stated in this petition:
+  {
+    "decision_date": "YYYY-MM-DD | null",
+    "final_outcome": "Approved | Denied | Withdrawn | null",
+    "rfe_issued": true | false | null,
+    "rfe_basis": "string | null",
+    "noid_issued": true | false | null,
+    "noid_basis": "string | null",
+    "denial_basis": "string | null",
+    "final_merits_determination": "Pass | Fail | null",
+    "basis_for_application": ["array of strings"] | null,
+    "included_publications": true | false | null,
+    "cell_cited": true | false | null,
+    "publication_type": "string | null"
+  }
+
+  WHERE TO LOOK FOR SECONDARY FIELDS IN A PETITION:
+  - An attorney cover letter sometimes references prior RFE or NOID history
+  - A table of contents or exhibit list may reveal publication types
+  - The cover letter argument sections reveal basis_for_application
+  - If the petition is a re-filing or MTR, it may state a prior denial and denial_basis
+
+  CONDITIONAL FIELD RULES:
+  - eb2_basis, endeavor_field, national_importance_framing, evidence_of_positioning_present,
+    dhanasar_prong_focus → populate ONLY if petition_type is EB-2 NIW. Otherwise null.
+  - criteria_claimed_count, major_award_claimed, publications_included,
+    judging_others_work_claimed, high_salary_claimed → populate for O-1A and EB-1A only.
+    Set to null if petition_type is EB-2 NIW.
+
+  Document:
+
+decision: |
+  You are analyzing a USCIS decision notice.
+
+  This is NOT a form — only narrative text.
+
+  INSTRUCTIONS:
+  - Scan the ENTIRE document before extracting any field
+  - DO NOT infer missing values
+  - Extract ONLY explicitly stated information
+  - Return ONLY JSON
+
+  PRIMARY FIELDS — always extract these from the decision:
+
+  decision_date:
+    Look for "Notice Date" or date at top of letter → YYYY-MM-DD
+
+  final_outcome:
+    "Approved" | "Denied" | "Withdrawn"
+
+  officer_number:
+    Look for: "Officer:", "Adjudicator:", alphanumeric stamp near signature, footer codes.
+    Return exact code as string or null.
+
+  rfe_issued:
+    true if "Request for Evidence" is explicitly mentioned. false otherwise.
+
+  noid_issued:
+    true if "Notice of Intent to Deny" is explicitly mentioned. false otherwise.
+
+  rfe_basis:
+    Only if rfe_issued is true. Choose ONE:
+      "Lack of independent corroboration"
+      "Evidence insufficient"
+      "Lack of originality"
+      "General claims"
+      "Evidence does not meet legal standard"
+      "Overreliance on expert letters"
+      "Other"
+    Null if rfe_issued is false.
+
+  noid_basis:
+    Only if noid_issued is true. Choose ONE:
+      "Lack of independent corroboration"
+      "Evidence insufficient"
+      "Lack of originality"
+      "General claims"
+      "Evidence does not meet legal standard"
+      "Inconsistencies or contradictions"
+      "Other"
+    Null if noid_issued is false.
+
+  denial_basis:
+    Only if final_outcome is "Denied". Choose ONE:
+      "Evidence too general"
+      "Overreliance on expert letters"
+      "Lack of independent corroboration"
+      "Legal standard not met"
+      "Criteria count insufficient"
+      "Other"
+    Null if not denied.
+
+  final_merits_determination:
+    Only for O-1A or EB-1A. "Pass" | "Fail" | null
+
+  dhanasar_prong_failed:
+    Only for EB-2 NIW denial. "Prong 1" | "Prong 2" | "Prong 3" | null
+
+  basis_for_approval:
+    Short paraphrase of key justification if approved. Null if denied.
+
+  primary_basis_for_decision:
+    Choose ONE:
+      "Major Award" | "High Salary" | "Publications" | "Judging" | "Critical Role" | "Other"
+
+  discretion_applied:
+    true if "in our discretion" or "USCIS determines" appears explicitly.
+
+  outcome_after_rfe:
+    "approved" | "denied" | null
+
+  outcome_after_noid:
+    "approved" | "denied" | null
+
+  SECONDARY FIELDS — these primarily live in the petition or evidence but extract them
+  here if explicitly stated in this decision notice:
+  {
+    "petition_type": "string | null",
+    "filing_date": "YYYY-MM-DD | null",
+    "service_center_or_field_office": "string | null",
+    "beneficiary_country_of_birth": "string | null",
+    "beneficiary_country_of_citizenship": "string | null",
+    "criteria_claimed_count": integer | null,
+    "major_award_claimed": "Y | N | null",
+    "publications_included": "Y | N | null",
+    "judging_others_work_claimed": "Y | N | null",
+    "high_salary_claimed": "Y | N | null",
+    "eb2_basis": "Advanced Degree | Exceptional Ability | null",
+    "endeavor_field": "Health | Energy | Tech | Public Policy | Other | null",
+    "dhanasar_prong_focus": "Prong 1 | Prong 2 | Prong 3 | null"
+  }
+
+  WHERE TO LOOK FOR SECONDARY FIELDS IN A DECISION:
+  - The decision header or opening paragraph often restates petition_type and filing_date
+  - The officer's analysis section names the specific O-1A criteria evaluated —
+    use this to populate criteria_claimed_count and the Y/N criteria fields
+  - For EB-2 NIW decisions, the Dhanasar prong analysis names the prong focus and
+    which prong failed
+  - The service center name appears in the letterhead or footer
+
+  Return EXACT JSON with ALL fields above (primary + secondary). Null for anything
+  not found.
+
+  Document:
+
+evidence: |
+  You are analyzing a LARGE USCIS evidence package (hundreds of pages).
+
+  IMPORTANT:
+  - This is NOT a form
+  - This is NOT structured
+  - You MUST scan for SIGNALS, not summarize
+
+  STRATEGY:
+  1. Scan document for keywords and patterns
+  2. Detect relevant sections
+  3. Extract ONLY final signals
+
+  DO NOT:
+  - Summarize
+  - Copy text
+  - Infer anything not clearly stated
+
+  ────────────────────────────
+  PRIMARY FIELDS — always extract these from the evidence package:
+
+  included_publications:
+    true if you detect journal articles, conference papers, arXiv/preprints,
+    or Google Scholar references.
+
+  cell_cited:
+    true ONLY if the journal "Cell" is explicitly named.
+
+  publication_type:
+    Highest quality type present:
+      "peer_reviewed_top_tier"  → Cell, Nature, Science, NEJM, Lancet
+      "peer_reviewed_other"     → any other peer-reviewed journal
+      "conference_paper"        → conference proceedings
+      "preprint"                → arXiv, bioRxiv, SSRN
+      "trade_publication"       → industry magazines
+      "blog_or_whitepaper"      → blog posts, internal whitepapers
+    null if no publications.
+
+  basis_for_application:
+    Array of ALL bases found, ordered by dominance (most evidence first):
+      "Major Award" | "High Salary" | "Publications" | "Judging" |
+      "Critical Role" | "Original Contributions"
+
+  evidence_of_positioning_present:
+    true if the package explicitly argues the beneficiary is "well positioned"
+    to advance their proposed endeavor (EB-2 NIW Prong 2 language).
+    false if absent. null if clearly O-1A or EB-1A.
+
+  ────────────────────────────
+  SECONDARY FIELDS — these primarily live in the petition or decision but extract
+  them here if explicitly stated anywhere in this evidence package:
+  {
+    "petition_type": "string | null",
+    "beneficiary_country_of_birth": "string | null",
+    "beneficiary_country_of_citizenship": "string | null",
+    "beneficiary_industry": "Tech | Pharmaceutical | Academic | Financial | Manufacturing | Other | null",
+    "criteria_claimed_count": integer | null,
+    "major_award_claimed": "Y | N | null",
+    "publications_included_petition": "Y | N | null",
+    "judging_others_work_claimed": "Y | N | null",
+    "high_salary_claimed": "Y | N | null",
+    "endeavor_field": "Health | Energy | Tech | Public Policy | Other | null",
+    "national_importance_framing": "Economic | Health | Security | Environmental | null"
+  }
+
+  WHERE TO LOOK FOR SECONDARY FIELDS IN AN EVIDENCE PACKAGE:
+  - The cover letter (first document in the package) explicitly lists O-1A criteria
+    being claimed — use this for criteria_claimed_count and all Y/N criteria fields
+  - The cover letter introduction states beneficiary background — country, industry
+  - For NIW packages, the cover letter's "proposed endeavor" section reveals
+    endeavor_field and national_importance_framing
+  - Pay stub exhibits confirm high_salary_claimed
+  - Award certificate exhibits confirm major_award_claimed
+  - Publication exhibits confirm publications_included and publication_type
+
+  ────────────────────────────
+  Return EXACT JSON with ALL fields above (primary + secondary):
+  {
+    "included_publications": null,
+    "cell_cited": null,
+    "publication_type": null,
+    "basis_for_application": null,
+    "evidence_of_positioning_present": null,
+    "petition_type": null,
+    "beneficiary_country_of_birth": null,
+    "beneficiary_country_of_citizenship": null,
+    "beneficiary_industry": null,
+    "criteria_claimed_count": null,
+    "major_award_claimed": null,
+    "publications_included_petition": null,
+    "judging_others_work_claimed": null,
+    "high_salary_claimed": null,
+    "endeavor_field": null,
+    "national_importance_framing": null
+  }
+
+  Document:
+
+rfe: |
+  You are analyzing a USCIS Request for Evidence (RFE) notice.
+
+  INSTRUCTIONS:
+  - Scan the ENTIRE document before extracting any field
+  - DO NOT infer missing values
+  - Extract ONLY explicitly stated information
+  - Return ONLY JSON
+
+  PRIMARY FIELDS:
+
+  rfe_issued:
+    Always true for this document type.
+
+  rfe_date:
+    Date the RFE was issued → YYYY-MM-DD
+    Look for "Notice Date" or date at top of letter.
+
+  rfe_response_deadline:
+    The deadline given to respond → YYYY-MM-DD
+    Look for "you must respond by", "response due", or a specific date near
+    "87 days" or "3 months".
+
+  rfe_basis:
+    The MAIN stated reason USCIS needs more evidence. Choose ONE:
+      "Lack of independent corroboration"
+      "Evidence insufficient"
+      "Lack of originality"
+      "General claims"
+      "Evidence does not meet legal standard"
+      "Overreliance on expert letters"
+      "Other"
+
+  rfe_criteria_challenged:
+    Array of O-1A criteria USCIS explicitly challenged in this RFE:
+      "Awards" | "Membership" | "Press" | "Judging" | "Original Contributions" |
+      "Scholarly Articles" | "Critical Role" | "High Salary"
+    Empty array [] if none named explicitly.
+
+  officer_number:
+    Alphanumeric code near signature or footer. Null if not found.
+
+  service_center_or_field_office:
+    Name of the USCIS office that issued the RFE.
+
+  SECONDARY FIELDS — extract if explicitly stated in this RFE:
+  {
+    "petition_type": "string | null",
+    "filing_date": "YYYY-MM-DD | null",
+    "beneficiary_country_of_birth": "string | null",
+    "beneficiary_country_of_citizenship": "string | null",
+    "criteria_claimed_count": integer | null,
+    "major_award_claimed": "Y | N | null",
+    "publications_included": "Y | N | null",
+    "judging_others_work_claimed": "Y | N | null",
+    "high_salary_claimed": "Y | N | null",
+    "eb2_basis": "Advanced Degree | Exceptional Ability | null",
+    "endeavor_field": "Health | Energy | Tech | Public Policy | Other | null",
+    "dhanasar_prong_focus": "Prong 1 | Prong 2 | Prong 3 | null"
+  }
+
+  WHERE TO LOOK FOR SECONDARY FIELDS IN AN RFE:
+  - The RFE header restates petition_type, receipt number, and often filing_date
+  - The officer's legal analysis names which specific criteria were claimed and
+    which are being challenged — use this for all Y/N criteria fields
+  - For NIW RFEs, the Dhanasar framework is named explicitly by prong
+
+  Return EXACT JSON:
+  {
+    "rfe_issued": true,
+    "rfe_date": null,
+    "rfe_response_deadline": null,
+    "rfe_basis": null,
+    "rfe_criteria_challenged": [],
+    "officer_number": null,
+    "service_center_or_field_office": null,
+    "petition_type": null,
+    "filing_date": null,
+    "beneficiary_country_of_birth": null,
+    "beneficiary_country_of_citizenship": null,
+    "criteria_claimed_count": null,
+    "major_award_claimed": null,
+    "publications_included": null,
+    "judging_others_work_claimed": null,
+    "high_salary_claimed": null,
+    "eb2_basis": null,
+    "endeavor_field": null,
+    "dhanasar_prong_focus": null
+  }
+
+  Document:

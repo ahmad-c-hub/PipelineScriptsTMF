@@ -1,0 +1,1329 @@
+✓ All clients ready.
+  RunPod : https://5z45cmnkr9d8w4-11434.proxy.runpod.net/
+  Model  : qwen2.5:14b-instruct-q8_0
+  GCP    : data-enclave-dev-488920
+============================================================
+STEP 0b: Fetching applications from GCS
+============================================================
+Applications in GCS: application-001, application-002
+Downloading 2 application(s)...
+  [application-001] Downloaded: AH Path O1A USCIS Forms.pdf
+  [application-001] Downloaded: AHUSSAIN_O1A_Petition_Full - CONFIDENTIAL.pdf
+  [application-001] Downloaded: AHussain_O-1_I797A_Approval_Notice.pdf
+  [application-002] Downloaded: Denial Notice.pdf
+  [application-002] Downloaded: FULL O-1A Filing - Balasubramani, Soundarya (1).pdf
+  [application-002] Downloaded: Final NIW Filing.pdf
+  [application-002] Downloaded: RFE.pdf
+
+
+============================================================
+APPLICATION: application-001  (1/2)
+============================================================
+
+[application-001] STEP 1: Naming
+
+[application-001] Found 3 file(s), classifying:
+  AH Path O1A USCIS Forms.pdf  →  petition.pdf
+  AHussain_O-1_I797A_Approval_Notice.pdf  →  decision.pdf
+  AHUSSAIN_O1A_Petition_Full - CONFIDENTIAL.pdf  →  evidence_other_1.pdf
+
+[application-001] STEP 2: Parsing
+
+[application-001] Parsing documents:
+  decision             → 2 pages, 7,016 chars
+  evidence_other_1     → 326 pages, 643,688 chars
+  petition             → 28 pages, 216,713 chars
+
+✓ application-001 prepared — naming 34s, parsing 16s
+
+============================================================
+APPLICATION: application-002  (2/2)
+============================================================
+
+[application-002] STEP 1: Naming
+
+[application-002] Found 4 file(s), classifying:
+  Denial Notice.pdf  →  decision.pdf
+  Final NIW Filing.pdf  →  petition.pdf
+  FULL O-1A Filing - Balasubramani, Soundarya (1).pdf  →  petition_2.pdf
+  RFE.pdf  →  rfe.pdf
+  Skipping parse for already-processed docs: ['decision', 'petition', 'petition_2', 'rfe']
+
+[application-002] STEP 2: Parsing
+
+[application-002] Parsing documents:
+  decision             → skipped (already processed)
+  petition             → skipped (already processed)
+  petition_2           → skipped (already processed)
+  rfe                  → skipped (already processed)
+
+✓ application-002 prepared — naming 33s, parsing 0s
+
+============================================================
+STEP 3: Pipeline — 2 application(s)
+============================================================
+
+RUN ID: 20260423_124118
+============================================================
+
+APPLICATION: application-001
+------------------------------------------------------------
+  No prior record — processing all documents.
+
+=== PROCESSING PETITION ===
+[petition] Page 1 → sending...
+[petition] Page 1 done (12.9s)
+[petition] Page 1 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 2 → sending...
+[petition] Page 2 done (11.5s)
+[petition] Page 2 → Found: ['petition_type', 'premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 3 → sending...
+[petition] Page 3 done (17.4s)
+[petition] Page 3 → Found: ['premium_processing', 'employer_sponsored', 'self_petition', 'beneficiary_country_of_birth', 'beneficiary_country_of_citizenship']
+[petition] Page 4 → sending...
+[petition] Page 4 done (10.9s)
+[petition] Page 4 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 5 → sending...
+[petition] Page 5 done (16.2s)
+[petition] Page 5 → Found: ['premium_processing', 'employer_sponsored', 'self_petition', 'beneficiary_industry']
+[petition] Page 6 → sending...
+[petition] Page 6 done (18.3s)
+[petition] Page 6 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 7 → sending...
+[petition] Page 7 done (10.4s)
+[petition] Page 7 → Found: ['premium_processing']
+[petition] Page 8 → sending...
+[petition] Page 8 done (11.9s)
+[petition] Page 8 → Found: ['premium_processing']
+[petition] Page 9 → sending...
+[petition] Page 9 done (10.3s)
+[petition] Page 9 → Found: ['petition_type', 'premium_processing', 'employer_sponsored', 'self_petition', 'beneficiary_industry']
+[petition] Page 10 → sending...
+[petition] Page 10 done (10.3s)
+[petition] Page 10 → Found: ['premium_processing', 'employer_sponsored', 'self_petition', 'noid_issued', 'noid_basis']
+[petition] Page 11 → sending...
+[petition] Page 11 done (9.7s)
+[petition] Page 11 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 12 → sending...
+[petition] Page 12 done (13.4s)
+[petition] Page 12 → Found: ['premium_processing']
+[petition] Page 13 → sending...
+[petition] Page 13 done (7.4s)
+[petition] Page 13 → Found: ['petition_type', 'premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 14 → sending...
+[petition] Page 14 done (10.2s)
+[petition] Page 14 → Found: ['premium_processing']
+[petition] Page 15 → sending...
+[petition] Page 15 done (9.9s)
+[petition] Page 15 → Found: ['premium_processing']
+[petition] Page 16 → sending...
+[petition] Page 16 done (10.2s)
+[petition] Page 16 → Found: ['premium_processing']
+[petition] Page 17 → sending...
+[petition] Page 17 done (9.2s)
+[petition] Page 17 → Found: ['premium_processing']
+[petition] Page 18 → sending...
+[petition] Page 18 done (14.1s)
+[petition] Page 18 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 19 → sending...
+[petition] Page 19 done (10.8s)
+[petition] Page 19 → Found: ['premium_processing']
+[petition] Page 20 → sending...
+[petition] Page 20 done (10.7s)
+[petition] Page 20 → Found: ['premium_processing']
+[petition] Page 21 → sending...
+[petition] Page 21 done (9.7s)
+[petition] Page 21 → Found: ['premium_processing']
+[petition] Page 22 → sending...
+[petition] Page 22 done (14.9s)
+[petition] Page 22 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 23 → sending...
+[petition] Page 23 done (12.0s)
+[petition] Page 23 → Found: ['premium_processing']
+[petition] Page 24 → sending...
+[petition] Page 24 done (9.7s)
+[petition] Page 24 → Found: ['premium_processing']
+[petition] Page 25 → sending...
+[petition] Page 25 done (12.9s)
+[petition] Page 25 → Found: ['premium_processing']
+[petition] Page 26 → sending...
+[petition] Page 26 done (10.7s)
+[petition] Page 26 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 27 → sending...
+[petition] Page 27 done (9.9s)
+[petition] Page 27 → Found: ['premium_processing']
+[petition] Page 28 → sending...
+[petition] Page 28 done (13.8s)
+[petition] Page 28 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+
+PETITION RESULT:
+{
+  "premium_processing": "Unknown",
+  "employer_sponsored": true,
+  "self_petition": false,
+  "petition_type": "O-1A Extraordinary Ability",
+  "beneficiary_country_of_birth": "United Kingdom",
+  "beneficiary_country_of_citizenship": "United Kingdom",
+  "beneficiary_industry": "Tech",
+  "noid_issued": false,
+  "noid_basis": "No - copy of request attached"
+}
+  → processed_applications/application-001: added 'petition'
+
+=== PROCESSING DECISION ===
+[decision] Page 1 → sending...
+[decision] Page 1 done (11.1s)
+[decision] Page 1 → Found: ['decision_date', 'final_outcome', 'rfe_issued', 'noid_issued', 'basis_for_approval', 'discretion_applied', 'petition_type', 'filing_date', 'service_center_or_field_office', 'beneficiary_country_of_citizenship']
+[decision] Page 2 → sending...
+[decision] Page 2 done (10.2s)
+[decision] Page 2 → Found: ['decision_date', 'final_outcome', 'rfe_issued', 'noid_issued', 'discretion_applied', 'petition_type', 'filing_date', 'service_center_or_field_office']
+
+DECISION RESULT:
+{
+  "decision_date": "2023-04-25",
+  "final_outcome": "Approved",
+  "rfe_issued": false,
+  "noid_issued": false,
+  "basis_for_approval": "The petition and accompanying request for a change of status have been approved.",
+  "discretion_applied": false,
+  "petition_type": "O-1A",
+  "filing_date": "2022-10-21",
+  "service_center_or_field_office": "Vermont Service Center",
+  "beneficiary_country_of_citizenship": "UNITED KINGDOM"
+}
+  → processed_applications/application-001: added 'decision'
+
+=== PROCESSING EVIDENCE (evidence_other_1) ===
+[evidence] Page 1 → sending...
+[evidence] Page 1 done (6.0s)
+[evidence] Page 1 → Found: ['petition_type']
+[evidence] Page 2 → sending...
+[evidence] Page 2 done (5.8s)
+[evidence] Page 2 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 3 → sending...
+[evidence] Page 3 done (6.1s)
+[evidence] Page 3 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'criteria_claimed_count', 'major_award_claimed', 'high_salary_claimed']
+[evidence] Page 4 → sending...
+[evidence] Page 4 done (6.4s)
+[evidence] Page 4 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 5 → sending...
+[evidence] Page 5 done (5.4s)
+[evidence] Page 5 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 6 → sending...
+[evidence] Page 6 done (5.4s)
+[evidence] Page 6 → Found: ['basis_for_application', 'petition_type', 'major_award_claimed']
+[evidence] Page 7 → sending...
+[evidence] Page 7 done (5.7s)
+[evidence] Page 7 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'judging_others_work_claimed', 'endeavor_field']
+[evidence] Page 8 → sending...
+[evidence] Page 8 done (5.3s)
+[evidence] Page 8 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type']
+[evidence] Page 9 → sending...
+[evidence] Page 9 done (5.6s)
+[evidence] Page 9 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 10 → sending...
+[evidence] Page 10 done (5.8s)
+[evidence] Page 10 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 11 → sending...
+[evidence] Page 11 done (5.7s)
+[evidence] Page 11 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 12 → sending...
+[evidence] Page 12 done (5.5s)
+[evidence] Page 12 → Found: ['petition_type']
+[evidence] Page 13 → sending...
+[evidence] Page 13 done (5.9s)
+[evidence] Page 13 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 14 → sending...
+[evidence] Page 14 done (5.8s)
+[evidence] Page 14 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'judging_others_work_claimed', 'high_salary_claimed', 'endeavor_field']
+[evidence] Page 15 → sending...
+[evidence] Page 15 done (5.8s)
+[evidence] Page 15 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 16 → sending...
+[evidence] Page 16 done (5.6s)
+[evidence] Page 16 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 17 → sending...
+[evidence] Page 17 done (8.6s)
+[evidence] Page 17 → No useful fields
+[evidence] Page 18 → sending...
+[evidence] Page 18 done (5.7s)
+[evidence] Page 18 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 19 → sending...
+[evidence] Page 19 done (5.9s)
+[evidence] Page 19 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 20 → sending...
+[evidence] Page 20 done (5.8s)
+[evidence] Page 20 → Found: ['included_publications', 'publication_type', 'basis_for_application', 'evidence_of_positioning_present', 'beneficiary_industry', 'publications_included_petition']
+[evidence] Page 21 → sending...
+[evidence] Page 21 done (7.4s)
+[evidence] Page 21 → No useful fields
+[evidence] Page 22 → sending...
+[evidence] Page 22 done (9.2s)
+[evidence] Page 22 → Found: ['petition_type']
+[evidence] Page 23 → sending...
+[evidence] Page 23 done (5.8s)
+[evidence] Page 23 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 24 → sending...
+[evidence] Page 24 done (5.8s)
+[evidence] Page 24 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field', 'national_importance_framing']
+[evidence] Page 25 → sending...
+[evidence] Page 25 done (5.5s)
+[evidence] Page 25 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 26 → sending...
+[evidence] Page 26 done (5.8s)
+[evidence] Page 26 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 27 → sending...
+[evidence] Page 27 done (5.4s)
+[evidence] Page 27 → Found: ['petition_type']
+[evidence] Page 28 → sending...
+[evidence] Page 28 done (9.2s)
+[evidence] Page 28 → Found: ['petition_type']
+[evidence] Page 29 → sending...
+[evidence] Page 29 done (6.3s)
+[evidence] Page 29 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 30 → sending...
+[evidence] Page 30 done (6.0s)
+[evidence] Page 30 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'judging_others_work_claimed']
+[evidence] Page 31 → sending...
+[evidence] Page 31 done (8.7s)
+[evidence] Page 31 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 32 → sending...
+[evidence] Page 32 done (5.5s)
+[evidence] Page 32 → Found: ['petition_type']
+[evidence] Page 33 → sending...
+[evidence] Page 33 done (6.1s)
+[evidence] Page 33 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 34 → sending...
+[evidence] Page 34 done (9.5s)
+[evidence] Page 34 → Found: ['petition_type']
+[evidence] Page 35 → sending...
+[evidence] Page 35 done (6.0s)
+[evidence] Page 35 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 36 → sending...
+[evidence] Page 36 done (5.7s)
+[evidence] Page 36 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 37 → sending...
+[evidence] Page 37 done (9.1s)
+[evidence] Page 37 → No useful fields
+[evidence] Page 38 → sending...
+[evidence] Page 38 done (9.3s)
+[evidence] Page 38 → Found: ['petition_type']
+[evidence] Page 39 → sending...
+[evidence] Page 39 done (5.8s)
+[evidence] Page 39 → Found: ['petition_type']
+[evidence] Page 40 → sending...
+[evidence] Page 40 done (9.2s)
+[evidence] Page 40 → No useful fields
+[evidence] Page 41 → sending...
+[evidence] Page 41 done (7.6s)
+[evidence] Page 41 → No useful fields
+[evidence] Page 42 → sending...
+[evidence] Page 42 done (9.1s)
+[evidence] Page 42 → Found: ['petition_type']
+[evidence] Page 43 → sending...
+[evidence] Page 43 done (7.2s)
+[evidence] Page 43 → No useful fields
+[evidence] Page 44 → sending...
+[evidence] Page 44 done (8.3s)
+[evidence] Page 44 → Found: ['petition_type']
+[evidence] Page 45 → sending...
+[evidence] Page 45 done (9.1s)
+[evidence] Page 45 → Found: ['petition_type']
+[evidence] Page 46 → sending...
+[evidence] Page 46 done (8.9s)
+[evidence] Page 46 → Found: ['petition_type']
+[evidence] Page 47 → sending...
+[evidence] Page 47 done (8.7s)
+[evidence] Page 47 → Found: ['petition_type']
+[evidence] Page 48 → sending...
+[evidence] Page 48 done (9.9s)
+[evidence] Page 48 → Found: ['petition_type']
+[evidence] Page 49 → sending...
+[evidence] Page 49 done (8.8s)
+[evidence] Page 49 → Found: ['petition_type']
+[evidence] Page 50 → sending...
+[evidence] Page 50 done (9.4s)
+[evidence] Page 50 → Found: ['petition_type']
+[evidence] Page 51 → sending...
+[evidence] Page 51 done (8.4s)
+[evidence] Page 51 → Found: ['petition_type']
+[evidence] Page 52 → sending...
+[evidence] Page 52 done (8.5s)
+[evidence] Page 52 → Found: ['petition_type']
+[evidence] Page 53 → sending...
+[evidence] Page 53 done (9.7s)
+[evidence] Page 53 → Found: ['petition_type']
+[evidence] Page 54 → sending...
+[evidence] Page 54 done (9.2s)
+[evidence] Page 54 → Found: ['petition_type']
+[evidence] Page 55 → sending...
+[evidence] Page 55 done (7.5s)
+[evidence] Page 55 → No useful fields
+[evidence] Page 56 → sending...
+[evidence] Page 56 done (7.6s)
+[evidence] Page 56 → No useful fields
+[evidence] Page 57 → sending...
+[evidence] Page 57 done (5.4s)
+[evidence] Page 57 → Found: ['petition_type']
+[evidence] Page 58 → sending...
+[evidence] Page 58 done (5.4s)
+[evidence] Page 58 → Found: ['petition_type']
+[evidence] Page 59 → sending...
+[evidence] Page 59 done (7.9s)
+[evidence] Page 59 → No useful fields
+[evidence] Page 60 → sending...
+[evidence] Page 60 done (8.8s)
+[evidence] Page 60 → Found: ['petition_type']
+[evidence] Page 61 → sending...
+[evidence] Page 61 done (5.5s)
+[evidence] Page 61 → Found: ['petition_type']
+[evidence] Page 62 → sending...
+[evidence] Page 62 done (8.1s)
+[evidence] Page 62 → No useful fields
+[evidence] Page 63 → sending...
+[evidence] Page 63 done (7.5s)
+[evidence] Page 63 → No useful fields
+[evidence] Page 64 → sending...
+[evidence] Page 64 done (8.6s)
+[evidence] Page 64 → No useful fields
+[evidence] Page 65 → sending...
+[evidence] Page 65 done (7.6s)
+[evidence] Page 65 → No useful fields
+[evidence] Page 66 → sending...
+[evidence] Page 66 done (5.5s)
+[evidence] Page 66 → Found: ['petition_type']
+[evidence] Page 67 → sending...
+[evidence] Page 67 done (5.5s)
+[evidence] Page 67 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 68 → sending...
+[evidence] Page 68 done (7.6s)
+[evidence] Page 68 → No useful fields
+[evidence] Page 69 → sending...
+[evidence] Page 69 done (5.6s)
+[evidence] Page 69 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 70 → sending...
+[evidence] Page 70 done (5.4s)
+[evidence] Page 70 → Found: ['petition_type']
+[evidence] Page 71 → sending...
+[evidence] Page 71 done (7.1s)
+[evidence] Page 71 → No useful fields
+[evidence] Page 72 → sending...
+[evidence] Page 72 done (9.5s)
+[evidence] Page 72 → Found: ['petition_type']
+[evidence] Page 73 → sending...
+[evidence] Page 73 done (9.6s)
+[evidence] Page 73 → No useful fields
+[evidence] Page 74 → sending...
+[evidence] Page 74 done (9.9s)
+[evidence] Page 74 → No useful fields
+[evidence] Page 75 → sending...
+[evidence] Page 75 done (10.8s)
+[evidence] Page 75 → No useful fields
+[evidence] Page 76 → sending...
+[evidence] Page 76 done (10.5s)
+[evidence] Page 76 → No useful fields
+[evidence] Page 77 → sending...
+[evidence] Page 77 done (10.3s)
+[evidence] Page 77 → Found: ['petition_type']
+[evidence] Page 78 → sending...
+[evidence] Page 78 done (10.0s)
+[evidence] Page 78 → Found: ['petition_type']
+[evidence] Page 79 → sending...
+[evidence] Page 79 done (9.6s)
+[evidence] Page 79 → No useful fields
+[evidence] Page 80 → sending...
+[evidence] Page 80 done (8.9s)
+[evidence] Page 80 → No useful fields
+[evidence] Page 81 → sending...
+[evidence] Page 81 done (9.6s)
+[evidence] Page 81 → No useful fields
+[evidence] Page 82 → sending...
+[evidence] Page 82 done (9.5s)
+[evidence] Page 82 → No useful fields
+[evidence] Page 83 → sending...
+[evidence] Page 83 done (8.3s)
+[evidence] Page 83 → No useful fields
+[evidence] Page 84 → sending...
+[evidence] Page 84 done (8.2s)
+[evidence] Page 84 → No useful fields
+[evidence] Page 85 → sending...
+[evidence] Page 85 done (9.4s)
+[evidence] Page 85 → Found: ['petition_type']
+[evidence] Page 86 → sending...
+[evidence] Page 86 done (5.7s)
+[evidence] Page 86 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 87 → sending...
+[evidence] Page 87 done (5.7s)
+[evidence] Page 87 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field', 'national_importance_framing']
+[evidence] Page 88 → sending...
+[evidence] Page 88 done (9.4s)
+[evidence] Page 88 → Found: ['petition_type']
+[evidence] Page 89 → sending...
+[evidence] Page 89 done (10.0s)
+[evidence] Page 89 → No useful fields
+[evidence] Page 90 → sending...
+[evidence] Page 90 done (9.6s)
+[evidence] Page 90 → No useful fields
+[evidence] Page 91 → sending...
+[evidence] Page 91 done (10.4s)
+[evidence] Page 91 → No useful fields
+[evidence] Page 92 → sending...
+[evidence] Page 92 done (10.3s)
+[evidence] Page 92 → No useful fields
+[evidence] Page 93 → sending...
+[evidence] Page 93 done (10.0s)
+[evidence] Page 93 → No useful fields
+[evidence] Page 94 → sending...
+[evidence] Page 94 done (10.2s)
+[evidence] Page 94 → Found: ['petition_type']
+[evidence] Page 95 → sending...
+[evidence] Page 95 done (9.6s)
+[evidence] Page 95 → Found: ['petition_type']
+[evidence] Page 96 → sending...
+[evidence] Page 96 done (5.8s)
+[evidence] Page 96 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 97 → sending...
+[evidence] Page 97 done (6.0s)
+[evidence] Page 97 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 98 → sending...
+[evidence] Page 98 done (8.9s)
+[evidence] Page 98 → Found: ['petition_type']
+[evidence] Page 99 → sending...
+[evidence] Page 99 done (9.7s)
+[evidence] Page 99 → No useful fields
+[evidence] Page 100 → sending...
+[evidence] Page 100 done (9.8s)
+[evidence] Page 100 → No useful fields
+[evidence] Page 101 → sending...
+[evidence] Page 101 done (10.9s)
+[evidence] Page 101 → No useful fields
+[evidence] Page 102 → sending...
+[evidence] Page 102 done (11.0s)
+[evidence] Page 102 → Found: ['petition_type']
+[evidence] Page 103 → sending...
+[evidence] Page 103 done (10.8s)
+[evidence] Page 103 → Found: ['petition_type']
+[evidence] Page 104 → sending...
+[evidence] Page 104 done (9.3s)
+[evidence] Page 104 → Found: ['petition_type']
+[evidence] Page 105 → sending...
+[evidence] Page 105 done (10.7s)
+[evidence] Page 105 → No useful fields
+[evidence] Page 106 → sending...
+[evidence] Page 106 done (10.0s)
+[evidence] Page 106 → No useful fields
+[evidence] Page 107 → sending...
+[evidence] Page 107 done (9.3s)
+[evidence] Page 107 → No useful fields
+[evidence] Page 108 → sending...
+[evidence] Page 108 done (12.3s)
+[evidence] Page 108 → No useful fields
+[evidence] Page 109 → sending...
+[evidence] Page 109 done (9.8s)
+[evidence] Page 109 → No useful fields
+[evidence] Page 110 → sending...
+[evidence] Page 110 done (10.0s)
+[evidence] Page 110 → Found: ['petition_type']
+[evidence] Page 111 → sending...
+[evidence] Page 111 done (9.9s)
+[evidence] Page 111 → No useful fields
+[evidence] Page 112 → sending...
+[evidence] Page 112 done (9.6s)
+[evidence] Page 112 → No useful fields
+[evidence] Page 113 → sending...
+[evidence] Page 113 done (9.9s)
+[evidence] Page 113 → No useful fields
+[evidence] Page 114 → sending...
+[evidence] Page 114 done (10.3s)
+[evidence] Page 114 → No useful fields
+[evidence] Page 115 → sending...
+[evidence] Page 115 done (9.4s)
+[evidence] Page 115 → No useful fields
+[evidence] Page 116 → sending...
+[evidence] Page 116 done (10.6s)
+[evidence] Page 116 → Found: ['petition_type']
+[evidence] Page 117 → sending...
+[evidence] Page 117 done (10.8s)
+[evidence] Page 117 → No useful fields
+[evidence] Page 118 → sending...
+[evidence] Page 118 done (9.6s)
+[evidence] Page 118 → No useful fields
+[evidence] Page 119 → sending...
+[evidence] Page 119 done (10.0s)
+[evidence] Page 119 → No useful fields
+[evidence] Page 120 → sending...
+[evidence] Page 120 done (10.8s)
+[evidence] Page 120 → No useful fields
+[evidence] Page 121 → sending...
+[evidence] Page 121 done (10.7s)
+[evidence] Page 121 → Found: ['petition_type']
+[evidence] Page 122 → sending...
+[evidence] Page 122 done (11.2s)
+[evidence] Page 122 → Parse error
+[evidence] Page 123 → sending...
+[evidence] Page 123 done (10.0s)
+[evidence] Page 123 → No useful fields
+[evidence] Page 124 → sending...
+[evidence] Page 124 done (9.6s)
+[evidence] Page 124 → No useful fields
+[evidence] Page 125 → sending...
+[evidence] Page 125 done (10.0s)
+[evidence] Page 125 → No useful fields
+[evidence] Page 126 → sending...
+[evidence] Page 126 done (11.4s)
+[evidence] Page 126 → No useful fields
+[evidence] Page 127 → sending...
+[evidence] Page 127 done (10.0s)
+[evidence] Page 127 → Found: ['petition_type']
+[evidence] Page 128 → sending...
+[evidence] Page 128 done (9.3s)
+[evidence] Page 128 → Found: ['petition_type']
+[evidence] Page 129 → sending...
+[evidence] Page 129 done (10.7s)
+[evidence] Page 129 → No useful fields
+[evidence] Page 130 → sending...
+[evidence] Page 130 done (10.5s)
+[evidence] Page 130 → No useful fields
+[evidence] Page 131 → sending...
+[evidence] Page 131 done (10.6s)
+[evidence] Page 131 → No useful fields
+[evidence] Page 132 → sending...
+[evidence] Page 132 done (10.4s)
+[evidence] Page 132 → No useful fields
+[evidence] Page 133 → sending...
+[evidence] Page 133 done (10.9s)
+[evidence] Page 133 → Found: ['petition_type']
+[evidence] Page 134 → sending...
+[evidence] Page 134 done (10.8s)
+[evidence] Page 134 → Found: ['petition_type']
+[evidence] Page 135 → sending...
+[evidence] Page 135 done (10.7s)
+[evidence] Page 135 → No useful fields
+[evidence] Page 136 → sending...
+[evidence] Page 136 done (9.9s)
+[evidence] Page 136 → No useful fields
+[evidence] Page 137 → sending...
+[evidence] Page 137 done (10.8s)
+[evidence] Page 137 → No useful fields
+[evidence] Page 138 → sending...
+[evidence] Page 138 done (10.8s)
+[evidence] Page 138 → No useful fields
+[evidence] Page 139 → sending...
+[evidence] Page 139 done (9.9s)
+[evidence] Page 139 → Found: ['petition_type']
+[evidence] Page 140 → sending...
+[evidence] Page 140 done (10.2s)
+[evidence] Page 140 → Found: ['petition_type']
+[evidence] Page 141 → sending...
+[evidence] Page 141 done (10.2s)
+[evidence] Page 141 → No useful fields
+[evidence] Page 142 → sending...
+[evidence] Page 142 done (9.3s)
+[evidence] Page 142 → No useful fields
+[evidence] Page 143 → sending...
+[evidence] Page 143 done (10.5s)
+[evidence] Page 143 → No useful fields
+[evidence] Page 144 → sending...
+[evidence] Page 144 done (11.0s)
+[evidence] Page 144 → No useful fields
+[evidence] Page 145 → sending...
+[evidence] Page 145 done (11.3s)
+[evidence] Page 145 → Found: ['petition_type']
+[evidence] Page 146 → sending...
+[evidence] Page 146 done (9.8s)
+[evidence] Page 146 → Found: ['petition_type']
+[evidence] Page 147 → sending...
+[evidence] Page 147 done (10.6s)
+[evidence] Page 147 → No useful fields
+[evidence] Page 148 → sending...
+[evidence] Page 148 done (10.2s)
+[evidence] Page 148 → No useful fields
+[evidence] Page 149 → sending...
+[evidence] Page 149 done (10.4s)
+[evidence] Page 149 → No useful fields
+[evidence] Page 150 → sending...
+[evidence] Page 150 done (11.1s)
+[evidence] Page 150 → Found: ['petition_type']
+[evidence] Page 151 → sending...
+[evidence] Page 151 done (9.9s)
+[evidence] Page 151 → No useful fields
+[evidence] Page 152 → sending...
+[evidence] Page 152 done (8.8s)
+[evidence] Page 152 → No useful fields
+[evidence] Page 153 → sending...
+[evidence] Page 153 done (10.9s)
+[evidence] Page 153 → No useful fields
+[evidence] Page 154 → sending...
+[evidence] Page 154 done (9.9s)
+[evidence] Page 154 → No useful fields
+[evidence] Page 155 → sending...
+[evidence] Page 155 done (10.7s)
+[evidence] Page 155 → No useful fields
+[evidence] Page 156 → sending...
+[evidence] Page 156 done (10.2s)
+[evidence] Page 156 → No useful fields
+[evidence] Page 157 → sending...
+[evidence] Page 157 done (9.7s)
+[evidence] Page 157 → No useful fields
+[evidence] Page 158 → sending...
+[evidence] Page 158 done (9.9s)
+[evidence] Page 158 → Found: ['petition_type']
+[evidence] Page 159 → sending...
+[evidence] Page 159 done (9.7s)
+[evidence] Page 159 → No useful fields
+[evidence] Page 160 → sending...
+[evidence] Page 160 done (9.3s)
+[evidence] Page 160 → No useful fields
+[evidence] Page 161 → sending...
+[evidence] Page 161 done (9.8s)
+[evidence] Page 161 → No useful fields
+[evidence] Page 162 → sending...
+[evidence] Page 162 done (10.9s)
+[evidence] Page 162 → No useful fields
+[evidence] Page 163 → sending...
+[evidence] Page 163 done (9.6s)
+[evidence] Page 163 → Found: ['petition_type']
+[evidence] Page 164 → sending...
+[evidence] Page 164 done (10.8s)
+[evidence] Page 164 → Found: ['petition_type']
+[evidence] Page 165 → sending...
+[evidence] Page 165 done (9.0s)
+[evidence] Page 165 → No useful fields
+[evidence] Page 166 → sending...
+[evidence] Page 166 done (5.9s)
+[evidence] Page 166 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 167 → sending...
+[evidence] Page 167 done (9.1s)
+[evidence] Page 167 → No useful fields
+[evidence] Page 168 → sending...
+[evidence] Page 168 done (5.7s)
+[evidence] Page 168 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 169 → sending...
+[evidence] Page 169 done (9.2s)
+[evidence] Page 169 → Found: ['petition_type']
+[evidence] Page 170 → sending...
+[evidence] Page 170 done (7.4s)
+[evidence] Page 170 → Found: ['petition_type']
+[evidence] Page 171 → sending...
+[evidence] Page 171 done (6.0s)
+[evidence] Page 171 → Found: ['petition_type']
+[evidence] Page 172 → sending...
+[evidence] Page 172 done (6.1s)
+[evidence] Page 172 → Found: ['petition_type']
+[evidence] Page 173 → sending...
+[evidence] Page 173 done (6.0s)
+[evidence] Page 173 → Found: ['petition_type']
+[evidence] Page 174 → sending...
+[evidence] Page 174 done (6.0s)
+[evidence] Page 174 → Found: ['petition_type']
+[evidence] Page 175 → sending...
+[evidence] Page 175 done (5.8s)
+[evidence] Page 175 → Found: ['petition_type']
+[evidence] Page 176 → sending...
+[evidence] Page 176 done (6.0s)
+[evidence] Page 176 → Found: ['petition_type']
+[evidence] Page 177 → sending...
+[evidence] Page 177 done (9.5s)
+[evidence] Page 177 → Found: ['basis_for_application', 'petition_type', 'judging_others_work_claimed']
+[evidence] Page 178 → sending...
+[evidence] Page 178 done (5.6s)
+[evidence] Page 178 → Found: ['petition_type']
+[evidence] Page 179 → sending...
+[evidence] Page 179 done (9.7s)
+[evidence] Page 179 → Found: ['petition_type']
+[evidence] Page 180 → sending...
+[evidence] Page 180 done (5.7s)
+[evidence] Page 180 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 181 → sending...
+[evidence] Page 181 done (5.5s)
+[evidence] Page 181 → Found: ['petition_type']
+[evidence] Page 182 → sending...
+[evidence] Page 182 done (5.4s)
+[evidence] Page 182 → Found: ['petition_type']
+[evidence] Page 183 → sending...
+[evidence] Page 183 done (9.5s)
+[evidence] Page 183 → Found: ['petition_type']
+[evidence] Page 184 → sending...
+[evidence] Page 184 done (6.3s)
+[evidence] Page 184 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 185 → sending...
+[evidence] Page 185 done (5.8s)
+[evidence] Page 185 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'judging_others_work_claimed']
+[evidence] Page 186 → sending...
+[evidence] Page 186 done (9.2s)
+[evidence] Page 186 → Found: ['petition_type']
+[evidence] Page 187 → sending...
+[evidence] Page 187 done (6.1s)
+[evidence] Page 187 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 188 → sending...
+[evidence] Page 188 done (5.9s)
+[evidence] Page 188 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 189 → sending...
+[evidence] Page 189 done (9.3s)
+[evidence] Page 189 → Found: ['petition_type']
+[evidence] Page 190 → sending...
+[evidence] Page 190 done (8.3s)
+[evidence] Page 190 → No useful fields
+[evidence] Page 191 → sending...
+[evidence] Page 191 done (5.7s)
+[evidence] Page 191 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 192 → sending...
+[evidence] Page 192 done (5.9s)
+[evidence] Page 192 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 193 → sending...
+[evidence] Page 193 done (5.7s)
+[evidence] Page 193 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 194 → sending...
+[evidence] Page 194 done (5.8s)
+[evidence] Page 194 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 195 → sending...
+[evidence] Page 195 done (9.3s)
+[evidence] Page 195 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 196 → sending...
+[evidence] Page 196 done (5.9s)
+[evidence] Page 196 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 197 → sending...
+[evidence] Page 197 done (5.7s)
+[evidence] Page 197 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 198 → sending...
+[evidence] Page 198 done (5.5s)
+[evidence] Page 198 → Found: ['evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 199 → sending...
+[evidence] Page 199 done (5.6s)
+[evidence] Page 199 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 200 → sending...
+[evidence] Page 200 done (5.6s)
+[evidence] Page 200 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 201 → sending...
+[evidence] Page 201 done (5.6s)
+[evidence] Page 201 → Found: ['petition_type']
+[evidence] Page 202 → sending...
+[evidence] Page 202 done (5.8s)
+[evidence] Page 202 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 203 → sending...
+[evidence] Page 203 done (5.8s)
+[evidence] Page 203 → Found: ['included_publications', 'basis_for_application', 'petition_type', 'beneficiary_industry', 'publications_included_petition', 'endeavor_field']
+[evidence] Page 204 → sending...
+[evidence] Page 204 done (10.8s)
+[evidence] Page 204 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 205 → sending...
+[evidence] Page 205 done (9.1s)
+[evidence] Page 205 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 206 → sending...
+[evidence] Page 206 done (5.7s)
+[evidence] Page 206 → Found: ['petition_type']
+[evidence] Page 207 → sending...
+[evidence] Page 207 done (10.9s)
+[evidence] Page 207 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 208 → sending...
+[evidence] Page 208 done (8.3s)
+[evidence] Page 208 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 209 → sending...
+[evidence] Page 209 done (5.6s)
+[evidence] Page 209 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 210 → sending...
+[evidence] Page 210 done (5.6s)
+[evidence] Page 210 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 211 → sending...
+[evidence] Page 211 done (5.8s)
+[evidence] Page 211 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 212 → sending...
+[evidence] Page 212 done (5.6s)
+[evidence] Page 212 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry']
+[evidence] Page 213 → sending...
+[evidence] Page 213 done (6.1s)
+[evidence] Page 213 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 214 → sending...
+[evidence] Page 214 done (5.8s)
+[evidence] Page 214 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 215 → sending...
+[evidence] Page 215 done (5.7s)
+[evidence] Page 215 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 216 → sending...
+[evidence] Page 216 done (5.7s)
+[evidence] Page 216 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 217 → sending...
+[evidence] Page 217 done (5.8s)
+[evidence] Page 217 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 218 → sending...
+[evidence] Page 218 done (8.8s)
+[evidence] Page 218 → No useful fields
+[evidence] Page 219 → sending...
+[evidence] Page 219 done (8.7s)
+[evidence] Page 219 → No useful fields
+[evidence] Page 220 → sending...
+[evidence] Page 220 done (7.6s)
+[evidence] Page 220 → No useful fields
+[evidence] Page 221 → sending...
+[evidence] Page 221 done (9.3s)
+[evidence] Page 221 → Found: ['petition_type']
+[evidence] Page 222 → sending...
+[evidence] Page 222 done (9.1s)
+[evidence] Page 222 → Found: ['petition_type']
+[evidence] Page 223 → sending...
+[evidence] Page 223 done (9.3s)
+[evidence] Page 223 → Found: ['petition_type']
+[evidence] Page 224 → sending...
+[evidence] Page 224 done (9.1s)
+[evidence] Page 224 → Found: ['petition_type']
+[evidence] Page 225 → sending...
+[evidence] Page 225 done (9.6s)
+[evidence] Page 225 → Found: ['petition_type']
+[evidence] Page 226 → sending...
+[evidence] Page 226 done (9.2s)
+[evidence] Page 226 → Found: ['petition_type']
+[evidence] Page 227 → sending...
+[evidence] Page 227 done (8.8s)
+[evidence] Page 227 → Found: ['petition_type']
+[evidence] Page 228 → sending...
+[evidence] Page 228 done (9.1s)
+[evidence] Page 228 → Found: ['petition_type']
+[evidence] Page 229 → sending...
+[evidence] Page 229 done (9.4s)
+[evidence] Page 229 → Found: ['petition_type']
+[evidence] Page 230 → sending...
+[evidence] Page 230 done (9.1s)
+[evidence] Page 230 → Found: ['petition_type']
+[evidence] Page 231 → sending...
+[evidence] Page 231 done (8.9s)
+[evidence] Page 231 → No useful fields
+[evidence] Page 232 → sending...
+[evidence] Page 232 done (9.9s)
+[evidence] Page 232 → Parse error
+[evidence] Page 233 → sending...
+[evidence] Page 233 done (7.5s)
+[evidence] Page 233 → No useful fields
+[evidence] Page 234 → sending...
+[evidence] Page 234 done (9.3s)
+[evidence] Page 234 → Found: ['petition_type']
+[evidence] Page 235 → sending...
+[evidence] Page 235 done (7.8s)
+[evidence] Page 235 → No useful fields
+[evidence] Page 236 → sending...
+[evidence] Page 236 done (7.7s)
+[evidence] Page 236 → No useful fields
+[evidence] Page 237 → sending...
+[evidence] Page 237 done (5.7s)
+[evidence] Page 237 → Found: ['petition_type']
+[evidence] Page 238 → sending...
+[evidence] Page 238 done (5.4s)
+[evidence] Page 238 → Found: ['petition_type']
+[evidence] Page 239 → sending...
+[evidence] Page 239 done (7.3s)
+[evidence] Page 239 → No useful fields
+[evidence] Page 240 → sending...
+[evidence] Page 240 done (5.4s)
+[evidence] Page 240 → Found: ['petition_type']
+[evidence] Page 241 → sending...
+[evidence] Page 241 done (5.5s)
+[evidence] Page 241 → Found: ['petition_type']
+[evidence] Page 242 → sending...
+[evidence] Page 242 done (7.4s)
+[evidence] Page 242 → No useful fields
+[evidence] Page 243 → sending...
+[evidence] Page 243 done (5.5s)
+[evidence] Page 243 → Found: ['petition_type']
+[evidence] Page 244 → sending...
+[evidence] Page 244 done (8.0s)
+[evidence] Page 244 → No useful fields
+[evidence] Page 245 → sending...
+[evidence] Page 245 done (7.5s)
+[evidence] Page 245 → No useful fields
+[evidence] Page 246 → sending...
+[evidence] Page 246 done (5.5s)
+[evidence] Page 246 → Found: ['petition_type']
+[evidence] Page 247 → sending...
+[evidence] Page 247 done (5.6s)
+[evidence] Page 247 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 248 → sending...
+[evidence] Page 248 done (7.4s)
+[evidence] Page 248 → No useful fields
+[evidence] Page 249 → sending...
+[evidence] Page 249 done (5.7s)
+[evidence] Page 249 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 250 → sending...
+[evidence] Page 250 done (12.7s)
+[evidence] Page 250 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type']
+[evidence] Page 251 → sending...
+[evidence] Page 251 done (9.4s)
+[evidence] Page 251 → No useful fields
+[evidence] Page 252 → sending...
+[evidence] Page 252 done (8.7s)
+[evidence] Page 252 → No useful fields
+[evidence] Page 253 → sending...
+[evidence] Page 253 done (5.9s)
+[evidence] Page 253 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 254 → sending...
+[evidence] Page 254 done (5.8s)
+[evidence] Page 254 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field', 'national_importance_framing']
+[evidence] Page 255 → sending...
+[evidence] Page 255 done (6.8s)
+[evidence] Page 255 → Found: ['petition_type']
+[evidence] Page 256 → sending...
+[evidence] Page 256 done (5.6s)
+[evidence] Page 256 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 257 → sending...
+[evidence] Page 257 done (5.8s)
+[evidence] Page 257 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 258 → sending...
+[evidence] Page 258 done (9.0s)
+[evidence] Page 258 → No useful fields
+[evidence] Page 259 → sending...
+[evidence] Page 259 done (5.9s)
+[evidence] Page 259 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 260 → sending...
+[evidence] Page 260 done (5.8s)
+[evidence] Page 260 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 261 → sending...
+[evidence] Page 261 done (9.2s)
+[evidence] Page 261 → Found: ['petition_type']
+[evidence] Page 262 → sending...
+[evidence] Page 262 done (5.7s)
+[evidence] Page 262 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 263 → sending...
+[evidence] Page 263 done (5.6s)
+[evidence] Page 263 → Found: ['evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 264 → sending...
+[evidence] Page 264 done (5.9s)
+[evidence] Page 264 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 265 → sending...
+[evidence] Page 265 done (5.6s)
+[evidence] Page 265 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 266 → sending...
+[evidence] Page 266 done (5.7s)
+[evidence] Page 266 → Found: ['petition_type']
+[evidence] Page 267 → sending...
+[evidence] Page 267 done (5.8s)
+[evidence] Page 267 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 268 → sending...
+[evidence] Page 268 done (5.8s)
+[evidence] Page 268 → Found: ['included_publications', 'basis_for_application', 'petition_type', 'beneficiary_industry', 'publications_included_petition', 'endeavor_field']
+[evidence] Page 269 → sending...
+[evidence] Page 269 done (12.1s)
+[evidence] Page 269 → Parse error
+[evidence] Page 270 → sending...
+[evidence] Page 270 done (8.9s)
+[evidence] Page 270 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 271 → sending...
+[evidence] Page 271 done (5.7s)
+[evidence] Page 271 → Found: ['petition_type']
+[evidence] Page 272 → sending...
+[evidence] Page 272 done (8.7s)
+[evidence] Page 272 → No useful fields
+[evidence] Page 273 → sending...
+[evidence] Page 273 done (8.5s)
+[evidence] Page 273 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 274 → sending...
+[evidence] Page 274 done (5.8s)
+[evidence] Page 274 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry']
+[evidence] Page 275 → sending...
+[evidence] Page 275 done (5.6s)
+[evidence] Page 275 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 276 → sending...
+[evidence] Page 276 done (5.9s)
+[evidence] Page 276 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 277 → sending...
+[evidence] Page 277 done (5.6s)
+[evidence] Page 277 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry']
+[evidence] Page 278 → sending...
+[evidence] Page 278 done (5.6s)
+[evidence] Page 278 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 279 → sending...
+[evidence] Page 279 done (5.6s)
+[evidence] Page 279 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry']
+[evidence] Page 280 → sending...
+[evidence] Page 280 done (5.8s)
+[evidence] Page 280 → Found: ['basis_for_application', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 281 → sending...
+[evidence] Page 281 done (5.6s)
+[evidence] Page 281 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 282 → sending...
+[evidence] Page 282 done (5.6s)
+[evidence] Page 282 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 283 → sending...
+[evidence] Page 283 done (7.9s)
+[evidence] Page 283 → No useful fields
+[evidence] Page 284 → sending...
+[evidence] Page 284 done (9.2s)
+[evidence] Page 284 → Found: ['petition_type']
+[evidence] Page 285 → sending...
+[evidence] Page 285 done (8.6s)
+[evidence] Page 285 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 286 → sending...
+[evidence] Page 286 done (6.0s)
+[evidence] Page 286 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 287 → sending...
+[evidence] Page 287 done (9.4s)
+[evidence] Page 287 → Found: ['petition_type']
+[evidence] Page 288 → sending...
+[evidence] Page 288 done (8.9s)
+[evidence] Page 288 → No useful fields
+[evidence] Page 289 → sending...
+[evidence] Page 289 done (5.8s)
+[evidence] Page 289 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 290 → sending...
+[evidence] Page 290 done (5.7s)
+[evidence] Page 290 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 291 → sending...
+[evidence] Page 291 done (5.7s)
+[evidence] Page 291 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 292 → sending...
+[evidence] Page 292 done (5.8s)
+[evidence] Page 292 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 293 → sending...
+[evidence] Page 293 done (9.4s)
+[evidence] Page 293 → Found: ['petition_type']
+[evidence] Page 294 → sending...
+[evidence] Page 294 done (5.6s)
+[evidence] Page 294 → Found: ['petition_type']
+[evidence] Page 295 → sending...
+[evidence] Page 295 done (8.5s)
+[evidence] Page 295 → No useful fields
+[evidence] Page 296 → sending...
+[evidence] Page 296 done (8.8s)
+[evidence] Page 296 → Found: ['petition_type']
+[evidence] Page 297 → sending...
+[evidence] Page 297 done (8.6s)
+[evidence] Page 297 → No useful fields
+[evidence] Page 298 → sending...
+[evidence] Page 298 done (6.1s)
+[evidence] Page 298 → Found: ['petition_type']
+[evidence] Page 299 → sending...
+[evidence] Page 299 done (8.3s)
+[evidence] Page 299 → No useful fields
+[evidence] Page 300 → sending...
+[evidence] Page 300 done (6.0s)
+[evidence] Page 300 → Found: ['petition_type']
+[evidence] Page 301 → sending...
+[evidence] Page 301 done (6.7s)
+[evidence] Page 301 → Found: ['petition_type']
+[evidence] Page 302 → sending...
+[evidence] Page 302 done (6.0s)
+[evidence] Page 302 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 303 → sending...
+[evidence] Page 303 done (9.2s)
+[evidence] Page 303 → No useful fields
+[evidence] Page 304 → sending...
+[evidence] Page 304 done (5.7s)
+[evidence] Page 304 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 305 → sending...
+[evidence] Page 305 done (9.2s)
+[evidence] Page 305 → Found: ['petition_type']
+[evidence] Page 306 → sending...
+[evidence] Page 306 done (9.3s)
+[evidence] Page 306 → Found: ['petition_type']
+[evidence] Page 307 → sending...
+[evidence] Page 307 done (8.5s)
+[evidence] Page 307 → Found: ['petition_type']
+[evidence] Page 308 → sending...
+[evidence] Page 308 done (8.8s)
+[evidence] Page 308 → Found: ['petition_type']
+[evidence] Page 309 → sending...
+[evidence] Page 309 done (8.0s)
+[evidence] Page 309 → No useful fields
+[evidence] Page 310 → sending...
+[evidence] Page 310 done (8.1s)
+[evidence] Page 310 → No useful fields
+[evidence] Page 311 → sending...
+[evidence] Page 311 done (8.8s)
+[evidence] Page 311 → Found: ['petition_type']
+[evidence] Page 312 → sending...
+[evidence] Page 312 done (8.7s)
+[evidence] Page 312 → No useful fields
+[evidence] Page 313 → sending...
+[evidence] Page 313 done (9.5s)
+[evidence] Page 313 → No useful fields
+[evidence] Page 314 → sending...
+[evidence] Page 314 done (7.5s)
+[evidence] Page 314 → Found: ['petition_type']
+[evidence] Page 315 → sending...
+[evidence] Page 315 done (5.9s)
+[evidence] Page 315 → Found: ['petition_type']
+[evidence] Page 316 → sending...
+[evidence] Page 316 done (5.3s)
+[evidence] Page 316 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 317 → sending...
+[evidence] Page 317 done (8.8s)
+[evidence] Page 317 → Found: ['petition_type']
+[evidence] Page 318 → sending...
+[evidence] Page 318 done (5.4s)
+[evidence] Page 318 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 319 → sending...
+[evidence] Page 319 done (9.5s)
+[evidence] Page 319 → Found: ['petition_type']
+[evidence] Page 320 → sending...
+[evidence] Page 320 done (5.9s)
+[evidence] Page 320 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 321 → sending...
+[evidence] Page 321 done (5.5s)
+[evidence] Page 321 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 322 → sending...
+[evidence] Page 322 done (5.5s)
+[evidence] Page 322 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 323 → sending...
+[evidence] Page 323 done (5.9s)
+[evidence] Page 323 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 324 → sending...
+[evidence] Page 324 done (11.1s)
+[evidence] Page 324 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 325 → sending...
+[evidence] Page 325 done (5.9s)
+[evidence] Page 325 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 326 → sending...
+[evidence] Page 326 done (9.2s)
+[evidence] Page 326 → No useful fields
+
+EVIDENCE (evidence_other_1) RESULT:
+{
+  "petition_type": "O-1A",
+  "basis_for_application": [
+    "High Salary",
+    "Critical Role"
+  ],
+  "evidence_of_positioning_present": false,
+  "beneficiary_industry": "Tech",
+  "endeavor_field": "Tech",
+  "criteria_claimed_count": 4,
+  "major_award_claimed": "Y",
+  "high_salary_claimed": "Y",
+  "judging_others_work_claimed": "Y",
+  "included_publications": true,
+  "publication_type": "peer_reviewed_top_tier",
+  "publications_included_petition": true,
+  "national_importance_framing": "Economic"
+}
+  → processed_applications/application-001: added 'evidence_other_1'
+
+=== [application-001] STATS ===
+  Pages processed  : 356
+  Inference time   : 2940.3s
+  Input tokens     : 662,730
+  Output tokens    : 83,702
+  New docs saved   : ['decision', 'evidence_other_1', 'petition']
+
+=== FINAL MERGED RESULT ===
+{
+  "premium_processing": "Unknown",
+  "employer_sponsored": true,
+  "self_petition": false,
+  "petition_type": "O-1A Extraordinary Ability",
+  "beneficiary_country_of_birth": "United Kingdom",
+  "beneficiary_country_of_citizenship": "United Kingdom",
+  "beneficiary_industry": "Tech",
+  "noid_issued": false,
+  "noid_basis": "No - copy of request attached",
+  "decision_date": "2023-04-25",
+  "final_outcome": "Approved",
+  "rfe_issued": false,
+  "basis_for_approval": "The petition and accompanying request for a change of status have been approved.",
+  "discretion_applied": false,
+  "filing_date": "2022-10-21",
+  "service_center_or_field_office": "Vermont Service Center",
+  "basis_for_application": [
+    "High Salary",
+    "Critical Role"
+  ],
+  "evidence_of_positioning_present": false,
+  "endeavor_field": "Tech",
+  "criteria_claimed_count": 4,
+  "major_award_claimed": "Y",
+  "high_salary_claimed": "Y",
+  "judging_others_work_claimed": "Y",
+  "included_publications": true,
+  "publication_type": "peer_reviewed_top_tier",
+  "publications_included_petition": true,
+  "national_importance_framing": "Economic",
+  "rfe_linked_to_evidence_issue": false,
+  "noid_linked_to_evidence_issue": false
+}
+
+APPLICATION: application-002
+------------------------------------------------------------
+  Already processed (0): []
+  New documents     (0):     []
+
+=== [application-002] STATS ===
+  Pages processed  : 0
+  Inference time   : 0.0s
+  Input tokens     : 0
+  Output tokens    : 0
+  New docs saved   : none (all reused)
+
+=== FINAL MERGED RESULT ===
+{
+  "outcome_after_rfe": "denied",
+  "rfe_response_deadline": "2022-04-29",
+  "employer_sponsored": false,
+  "beneficiary_country_of_citizenship": "India",
+  "filing_date": "2023-08-17",
+  "high_salary_claimed": "Y",
+  "self_petition": true,
+  "publications_included": true,
+  "rfe_date": "2022-02-01",
+  "noid_issued": false,
+  "eb2_basis": "Advanced Degree",
+  "judging_others_work_claimed": true,
+  "service_center_or_field_office": "Tempe, AZ",
+  "endeavor_field": "Tech",
+  "included_publications": true,
+  "petition_type": "EB-2 NIW",
+  "major_award_claimed": "Y",
+  "national_importance_framing": "Economic",
+  "criteria_claimed_count": 1,
+  "final_outcome": "Denied",
+  "noid_basis": "No - copy of request attached",
+  "rfe_issued": false,
+  "evidence_of_positioning_present": true,
+  "beneficiary_industry": "Tech",
+  "dhanasar_prong_focus": "Prong 1 | Prong 2 | Prong 3",
+  "premium_processing": "Y",
+  "rfe_basis": "Evidence insufficient",
+  "decision_date": "2022-05-16",
+  "final_merits_determination": "Pass",
+  "rfe_linked_to_evidence_issue": true,
+  "rfe_criteria_challenged": [
+    ""
+  ],
+  "officer_number": "CSCI129CSCI12000020316612",
+  "publication_type": "Books",
+  "beneficiary_country_of_birth": "India",
+  "denial_basis": "WAC2211050544 ",
+  "cell_cited": false,
+  "discretion_applied": false,
+  "noid_linked_to_evidence_issue": false,
+  "basis_for_application": [
+    "Talent Mobility (Education and Technology)"
+  ]
+}
+
+Saving to Firestore...
+Saved → Firestore (run_id=20260423_124118)
+
+[aggregate] Transforming 2 app(s) → aggregated_cases (2 this run + 0 historical)...
+  ✓ aggregated_cases/application-001_20260423_124118
+  ✓ aggregated_cases/application-002_20260423_124118
+[aggregate] Transform done.
+
+[aggregate] Reading aggregated_cases for run 20260423_124118...
+  Found 2 doc(s)
+  Pre-computing 54 filter combination(s)...
+  ✓ 54 slices computed
+  ✓ aggregated_insights/20260423_124118
+[aggregate] Done.
+
+============================================================
+ALL DONE — 2 application(s).
+Log saved → C:\Users\HAMMOUD\Desktop\PipelineScriptsTMF-main\logs\20260423_122911.log
+============================================================
+
+============================================================
+TIMING SUMMARY
+============================================================
+Application        Naming   Parsing
+-----------------------------------
+application-001       34s       16s
+application-002       33s        0s
+-----------------------------------
+Pipeline (all apps)             49m 08s
+TOTAL RUN                   50m 34s
+============================================================

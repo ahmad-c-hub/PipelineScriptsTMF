@@ -2,7 +2,7 @@
 *.pdf
 *.md
 !README.md
-logs/
 applications/
+applications_default/
 __pycache__/
 

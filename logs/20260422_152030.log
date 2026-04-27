@@ -1,0 +1,191 @@
+✓ All clients ready.
+  RunPod : https://b0s3h7rcgadih6-11434.proxy.runpod.net/
+  Model  : qwen2.5:14b-instruct-q8_0
+  GCP    : data-enclave-dev-488920
+Applications found locally: application-001, application-002
+
+============================================================
+APPLICATION: application-001  (1/2)
+============================================================
+
+[application-001] STEP 1: Naming
+
+[application-001] Found 1 file(s), classifying:
+  AH Path O1A USCIS Forms.pdf  →  petition.pdf
+  Skipping parse for already-processed docs: ['decision', 'evidence_other_1', 'petition']
+
+[application-001] STEP 2: Parsing
+
+[application-001] Parsing documents:
+  petition             → skipped (already processed)
+
+✓ application-001 prepared — naming 7s, parsing 0s
+
+============================================================
+APPLICATION: application-002  (2/2)
+============================================================
+
+[application-002] STEP 1: Naming
+
+[application-002] Found 4 file(s), classifying:
+  decision.pdf  →  decision.pdf
+  petition.pdf  →  petition.pdf
+  petition_2.pdf  →  petition_2.pdf
+  rfe.pdf  →  rfe.pdf
+  Skipping parse for already-processed docs: ['decision', 'petition', 'petition_2', 'rfe']
+
+[application-002] STEP 2: Parsing
+
+[application-002] Parsing documents:
+  decision             → skipped (already processed)
+  petition             → skipped (already processed)
+  petition_2           → skipped (already processed)
+  rfe                  → skipped (already processed)
+
+✓ application-002 prepared — naming 43s, parsing 0s
+
+============================================================
+STEP 3: Pipeline — 2 application(s)
+============================================================
+
+RUN ID: 20260422_152127
+============================================================
+
+APPLICATION: application-001
+------------------------------------------------------------
+  Already processed (0): []
+  New documents     (0):     []
+
+=== [application-001] STATS ===
+  Pages processed  : 0
+  Inference time   : 0.0s
+  Input tokens     : 0
+  Output tokens    : 0
+  New docs saved   : none (all reused)
+
+=== FINAL MERGED RESULT ===
+{
+  "service_center_or_field_office": "Vermont Service Center",
+  "employer_sponsored": true,
+  "beneficiary_country_of_citizenship": "United Kingdom",
+  "decision_date": "2023-04-25",
+  "high_salary_claimed": "Y",
+  "self_petition": false,
+  "national_importance_framing": "Economic",
+  "publications_included_petition": true,
+  "noid_issued": false,
+  "filing_date": "2022-10-21",
+  "judging_others_work_claimed": "Y",
+  "endeavor_field": "Tech",
+  "petition_type": "O-1A Extraordinary Ability",
+  "basis_for_approval": "The petition and accompanying request for a change of status have been approved.",
+  "major_award_claimed": "Y",
+  "publication_type": "peer_reviewed_top_tier",
+  "included_publications": true,
+  "criteria_claimed_count": 4,
+  "beneficiary_country_of_birth": "United Kingdom",
+  "noid_basis": "No - copy of request attached",
+  "rfe_issued": false,
+  "evidence_of_positioning_present": false,
+  "final_outcome": "Approved",
+  "beneficiary_industry": "Tech",
+  "discretion_applied": false,
+  "premium_processing": "Unknown",
+  "basis_for_application": [
+    "High Salary",
+    "Critical Role"
+  ],
+  "rfe_linked_to_evidence_issue": false,
+  "noid_linked_to_evidence_issue": false
+}
+
+APPLICATION: application-002
+------------------------------------------------------------
+  Already processed (0): []
+  New documents     (0):     []
+
+=== [application-002] STATS ===
+  Pages processed  : 0
+  Inference time   : 0.0s
+  Input tokens     : 0
+  Output tokens    : 0
+  New docs saved   : none (all reused)
+
+=== FINAL MERGED RESULT ===
+{
+  "outcome_after_rfe": "denied",
+  "rfe_response_deadline": "2022-04-29",
+  "employer_sponsored": false,
+  "beneficiary_country_of_citizenship": "India",
+  "filing_date": "2023-08-17",
+  "high_salary_claimed": "Y",
+  "self_petition": true,
+  "publications_included": true,
+  "rfe_date": "2022-02-01",
+  "noid_issued": false,
+  "eb2_basis": "Advanced Degree",
+  "judging_others_work_claimed": true,
+  "service_center_or_field_office": "Tempe, AZ",
+  "endeavor_field": "Tech",
+  "included_publications": true,
+  "petition_type": "EB-2 NIW",
+  "major_award_claimed": "Y",
+  "national_importance_framing": "Economic",
+  "criteria_claimed_count": 1,
+  "final_outcome": "Denied",
+  "noid_basis": "No - copy of request attached",
+  "rfe_issued": false,
+  "evidence_of_positioning_present": true,
+  "beneficiary_industry": "Tech",
+  "dhanasar_prong_focus": "Prong 1 | Prong 2 | Prong 3",
+  "premium_processing": "Y",
+  "rfe_basis": "Evidence insufficient",
+  "decision_date": "2022-05-16",
+  "final_merits_determination": "Pass",
+  "rfe_linked_to_evidence_issue": true,
+  "rfe_criteria_challenged": [
+    ""
+  ],
+  "officer_number": "CSCI129CSCI12000020316612",
+  "publication_type": "Books",
+  "beneficiary_country_of_birth": "India",
+  "denial_basis": "WAC2211050544 ",
+  "cell_cited": false,
+  "discretion_applied": false,
+  "noid_linked_to_evidence_issue": false,
+  "basis_for_application": [
+    "Talent Mobility (Education and Technology)"
+  ]
+}
+
+Saving to Firestore...
+Saved → Firestore (run_id=20260422_152127)
+
+[aggregate] Transforming 2 app(s) → aggregated_cases...
+  ✓ aggregated_cases/application-001_20260422_152127
+  ✓ aggregated_cases/application-002_20260422_152127
+[aggregate] Transform done.
+
+[aggregate] Reading aggregated_cases for run 20260422_152127...
+  Found 2 doc(s)
+  Pre-computing 54 filter combination(s)...
+  ✓ 54 slices computed
+  ✓ aggregated_insights/20260422_152127
+[aggregate] Done.
+
+============================================================
+ALL DONE — 2 application(s).
+Log saved → C:\Users\HAMMOUD\Desktop\PipelineScriptsTMF-main\logs\20260422_152030.log
+============================================================
+
+============================================================
+TIMING SUMMARY
+============================================================
+Application        Naming   Parsing
+-----------------------------------
+application-001        7s        0s
+application-002       43s        0s
+-----------------------------------
+Pipeline (all apps)                  4s
+TOTAL RUN                       57s
+============================================================

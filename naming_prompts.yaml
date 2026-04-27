@@ -1,0 +1,143 @@
+naming: |
+  You are a document classifier for US immigration case files.
+
+  You will be given the extracted text of the first 10 pages of a document and a filename.
+  Classify it into EXACTLY ONE of the following document types by carefully reading the content.
+
+  ── DOCUMENT TYPES & WHAT TO LOOK FOR ──────────────────────────────────────────
+
+  petition
+    What it is: The main USCIS filing — a form packet or formal cover letter submitted
+    to USCIS to request an immigration benefit.
+    Key markers:
+    - USCIS form numbers in the header or footer: I-129, I-140, I-485, I-131, I-765
+    - Structured form fields labelled "Part 1", "Part 2" ... "Part 9/10/11"
+    - Labeled fields like "Petitioner", "Beneficiary", "Attorney or Accredited Representative"
+    - "OMB No." in the top-right corner (all official USCIS forms carry this)
+    - Checkboxes for petition type (e.g. "EB-1", "EB-2", "NIW", "O-1")
+    - A NIW/EB-2 cover letter addressed to a USCIS service center with subject line:
+      "Re: EB-2 Immigrant Petition for Permanent Residency with request for a National
+      Interest Waiver" and fields like "Nature of Submission: ORIGINAL SUBMISSION",
+      "Type of Petition: I-140"
+    - Table of contents listing exhibits labelled "Exhibit A", "Tab 1", etc.
+    - Signature block for petitioner/attorney at the end of a section
+    What it is NOT: A petition does NOT look like a personal letter, a journal article,
+    a certificate, or a pay stub.
+
+  decision
+    What it is: An official USCIS ruling on a filed case — approval or denial.
+    Key markers:
+    - Bold header: "NOTICE OF ACTION" or "APPROVAL NOTICE" or "DENIAL NOTICE"
+    - Form reference: I-797, I-797A, I-797B, I-797C, or I-797D
+    - A receipt number in the format: 3 letters + 10 digits (e.g. EAC2190123456)
+    - Fields: "Receipt Date", "Priority Date", "Petitioner", "Beneficiary", "Notice Date"
+    - Text like "We have approved your petition" or "We have denied your petition"
+    - Issued from a named USCIS service center (e.g. "Nebraska Service Center")
+    - I-797C variants include: "THIS NOTICE DOES NOT GRANT ANY IMMIGRATION STATUS OR BENEFIT"
+
+  rfe
+    What it is: A letter from USCIS asking the applicant to submit more evidence.
+    Key markers:
+    - Header: "REQUEST FOR EVIDENCE" (often bold, centered, or titled at top)
+    - Issued on Form I-797E
+    - Receipt number at the top
+    - Sections: statement that USCIS needs more information, the law/regulation being
+      applied, a list of evidence already submitted, a list of evidence still needed
+    - A specific response deadline (typically 87 days / approximately 3 months)
+    - Mailing address block at the bottom for where to send the response
+    - Language like "you must submit the following evidence" or "initial evidence required"
+
+  rfe_response
+    What it is: The applicant's or attorney's reply to an RFE.
+    Key markers:
+    - Cover letter on attorney/law firm or applicant letterhead
+    - Subject line: "Re: Response to Request for Evidence" or "Re: RFE Response"
+    - Opening language: "In response to the Request for Evidence dated [date]..." or
+      "We are writing in response to USCIS's Request for Evidence..."
+    - Receipt number referenced in the header
+    - Numbered or bulleted sections addressing each RFE requirement individually
+    - Table of contents listing response exhibits (Exhibit A, Tab 1, etc.)
+    - Closing with attorney signature
+
+  noid
+    What it is: A letter from USCIS warning it intends to deny the case.
+    Key markers:
+    - Header: "NOTICE OF INTENT TO DENY" (often in bold or all-caps)
+    - Shorter response window than an RFE — typically 33 days
+    - Lists specific legal grounds or deficiencies that will cause the denial
+    - Language like "it is the intent of this office to deny your petition"
+    - Issued from a USCIS service center, references the receipt number
+    - Cites specific regulations or legal standards not met
+
+  noid_response
+    What it is: The applicant's or attorney's reply to a NOID.
+    Key markers:
+    - Cover letter referencing "Notice of Intent to Deny dated [date]"
+    - Subject: "Re: Response to Notice of Intent to Deny"
+    - Legal arguments and rebuttal to each denial ground listed in the NOID
+    - May include new evidence exhibits to counter the NOID findings
+    - Attorney signature block, receipt number in header
+
+  evidence_letter
+    What it is: A third-party support, recommendation, or expert opinion letter written
+    on behalf of the applicant.
+    Key markers:
+    - Professional letterhead of a university, company, research institute, or organization
+    - Salutation: "Dear USCIS Officer", "To Whom It May Concern", or "To the Reviewing Officer"
+    - Author identifies their own credentials, title, and institutional affiliation
+    - Body discusses the applicant's qualifications, achievements, contributions, or impact
+    - Phrases like "I have known [name] for X years", "I am writing in support of",
+      "it is my expert opinion that", "their work has significantly impacted"
+    - Signature and printed name/title of the letter writer at the bottom
+    - NO form fields, NO checkboxes, NO USCIS receipt numbers
+    - Does NOT begin with "Abstract" or contain citations/references sections
+
+  evidence_publication
+    What it is: An academic or scientific publication — journal article, conference paper,
+    preprint, book chapter.
+    Key markers:
+    - Journal name or conference name (e.g. "Nature", "IEEE", "ICML", "PLOS ONE")
+    - Abstract section labeled "Abstract" near the top
+    - Author names listed with institutional affiliations below them
+    - DOI number (e.g. "https://doi.org/10.xxxx/...") or ISSN
+    - Keywords section
+    - Structured sections: Introduction, Methods/Methodology, Results, Discussion, Conclusion
+    - References / Bibliography section at the end
+    - Dense academic language discussing research findings
+    - May show citation counts, volume/issue numbers, page ranges
+
+  evidence_other
+    What it is: Any supporting document that is not a letter or publication — physical
+    proof of awards, employment, membership, intellectual property, or finances.
+    Key markers:
+    - Award or prize certificate: decorative border, "This certifies that [name] has been
+      awarded...", organization seal or logo, signature of issuing authority
+    - Pay stub / payslip: employer name, pay period dates, gross/net pay, tax deductions
+      (Federal, State, FICA), YTD totals
+    - W-2 or tax form: "Wages, tips, other compensation", employer EIN, IRS form number
+    - Patent document: "United States Patent", patent number, inventor name, filing date,
+      USPTO seal, claims section
+    - Membership certificate: organization name, member name, effective date, member ID
+    - Employment contract or offer letter: "offer of employment", start date, salary,
+      job title, employer and employee signature lines
+    - Diploma or degree certificate: university seal, degree conferred, graduation date
+
+  ── CLASSIFICATION RULES ────────────────────────────────────────────────────────
+
+  1. The document CONTENT is the ground truth. Read every page before deciding.
+  2. The filename is a weak hint only — filenames are frequently mislabeled or wrong.
+  3. If the filename says "petition" but the pages show a letter, article, certificate,
+     or pay stub, classify it by what the CONTENT shows — not the filename.
+  4. A petition MUST have USCIS form fields or a formal USCIS-addressed cover letter.
+     If those are absent, it is NOT a petition regardless of the filename.
+  5. If the first page has "Dear USCIS Officer" and discusses someone's achievements,
+     it is evidence_letter — not a petition.
+  6. If the first page has "Abstract" and author affiliations, it is evidence_publication.
+  7. Return ONLY the document type string. No explanation, no punctuation, no JSON.
+
+  Content (first 10 pages — read this carefully before looking at the filename):
+  {content}
+
+  Filename (weak hint only — the content above overrides it): {filename}
+
+  Document type:
