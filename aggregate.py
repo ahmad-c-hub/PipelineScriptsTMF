@@ -292,6 +292,20 @@ def aggregate_and_save(firestore_client, run_id, model_name):
             for pt, v in sorted(pub_type_approvals.items(), key=lambda x: -x[1]["total"])
         ]
 
+        def cell_freq(field):
+            m = {}
+            for d in cell_docs:
+                v = d.get(field)
+                if v is None: continue
+                items = v if isinstance(v, list) else [v]
+                for item in items:
+                    if item is not None:
+                        m[item] = m.get(item, 0) + 1
+            return [
+                {"label": k, "count": v, "pct": pct(v, c_total) if c_total else 0}
+                for k, v in sorted(m.items(), key=lambda x: -x[1])
+            ]
+
         cell_block = {
             "total":                  c_total,
             "approval_rate":          pct(sum(1 for d in cell_docs     if d.get("approved")), c_total)  if c_total  else None,
@@ -304,6 +318,8 @@ def aggregate_and_save(firestore_client, run_id, model_name):
                 {"label": "NOID Issued",   **_outcome(cell_noid_docs)},
             ],
             "pub_type_approval_rates": pub_type_approval_rates,
+            "rfe_basis_freq":          cell_freq("rfe_basis"),
+            "noid_basis_freq":         cell_freq("noid_basis"),
         }
 
         # ── Officers ───────────────────────────────────────────
