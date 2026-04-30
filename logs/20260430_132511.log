@@ -1,0 +1,286 @@
+✓ All clients ready.
+  RunPod : https://55viprcxvixlsb-11434.proxy.runpod.net/
+  Model  : qwen2.5:14b-instruct-q8_0
+  GCP    : data-enclave-dev-488920
+============================================================
+STEP 0b: Fetching applications from GCS
+============================================================
+Applications in GCS: application-001, application-002
+Downloading 2 application(s)...
+  [application-001] Downloaded: AH Path O1A USCIS Forms.pdf
+  [application-001] Downloaded: AHUSSAIN_O1A_Petition_Full - CONFIDENTIAL.pdf
+  [application-001] Downloaded: AHussain_O-1_I797A_Approval_Notice.pdf
+  [application-002] Downloaded: Denial Notice.pdf
+  [application-002] Downloaded: FULL O-1A Filing - Balasubramani, Soundarya (1).pdf
+  [application-002] Downloaded: Final NIW Filing.pdf
+  [application-002] Downloaded: RFE.pdf
+
+
+============================================================
+APPLICATION: application-001  (1/2)
+============================================================
+
+[application-001] STEP 1: Naming
+
+[application-001] Found 3 file(s), classifying:
+  AH Path O1A USCIS Forms.pdf  →  petition.pdf
+  AHussain_O-1_I797A_Approval_Notice.pdf  →  decision.pdf
+  AHUSSAIN_O1A_Petition_Full - CONFIDENTIAL.pdf  →  evidence_other_1.pdf
+  Skipping parse for already-processed docs: ['decision', 'evidence_other_1', 'petition']
+
+[application-001] STEP 2: Parsing
+
+[application-001] Parsing documents:
+  decision             → skipped (already processed)
+  evidence_other_1     → skipped (already processed)
+  petition             → skipped (already processed)
+
+✓ application-001 prepared — naming 18s, parsing 0s
+
+============================================================
+APPLICATION: application-002  (2/2)
+============================================================
+
+[application-002] STEP 1: Naming
+
+[application-002] Found 4 file(s), classifying:
+  Denial Notice.pdf  →  decision.pdf
+  Final NIW Filing.pdf  →  petition.pdf
+  FULL O-1A Filing - Balasubramani, Soundarya (1).pdf  →  petition_2.pdf
+  RFE.pdf  →  rfe.pdf
+  Skipping parse for already-processed docs: ['decision', 'petition', 'petition_2']
+
+[application-002] STEP 2: Parsing
+
+[application-002] Parsing documents:
+  decision             → skipped (already processed)
+  petition             → skipped (already processed)
+  petition_2           → skipped (already processed)
+  rfe                  → 20 pages, 58,893 chars
+
+✓ application-002 prepared — naming 31s, parsing 1s
+
+============================================================
+STEP 3: Pipeline — 2 application(s)
+============================================================
+
+RUN ID: 20260430_133558
+============================================================
+
+APPLICATION: application-001
+------------------------------------------------------------
+  Already processed (0): []
+  New documents     (0):     []
+
+=== [application-001] STATS ===
+  Pages processed  : 0
+  Inference time   : 0.0s
+  Input tokens     : 0
+  Output tokens    : 0
+  New docs saved   : none (all reused)
+
+=== FINAL MERGED RESULT ===
+{
+  "service_center_or_field_office": "Vermont Service Center",
+  "employer_sponsored": true,
+  "beneficiary_country_of_citizenship": "United Kingdom",
+  "decision_date": "2023-04-25",
+  "high_salary_claimed": "Y",
+  "self_petition": false,
+  "national_importance_framing": "Economic",
+  "publications_included_petition": true,
+  "noid_issued": false,
+  "filing_date": "2022-10-21",
+  "judging_others_work_claimed": "Y",
+  "endeavor_field": "Tech",
+  "petition_type": "O-1A Extraordinary Ability",
+  "basis_for_approval": "The petition and accompanying request for a change of status have been approved.",
+  "major_award_claimed": "Y",
+  "publication_type": "peer_reviewed_top_tier",
+  "included_publications": true,
+  "criteria_claimed_count": 4,
+  "beneficiary_country_of_birth": "United Kingdom",
+  "noid_basis": "No - copy of request attached",
+  "rfe_issued": false,
+  "evidence_of_positioning_present": false,
+  "final_outcome": "Approved",
+  "beneficiary_industry": "Tech",
+  "discretion_applied": false,
+  "premium_processing": "Unknown",
+  "basis_for_application": [
+    "High Salary",
+    "Critical Role"
+  ],
+  "rfe_linked_to_evidence_issue": false,
+  "noid_linked_to_evidence_issue": false
+}
+
+APPLICATION: application-002
+------------------------------------------------------------
+  Already processed (0): []
+  New documents     (1):     ['rfe']
+
+=== PROCESSING RFE ===
+[rfe] Page 1 → sending...
+[rfe] Page 1 done (9.6s)
+[rfe] Page 1 → Found: ['rfe_issued', 'rfe_date', 'rfe_response_deadline', 'rfe_criteria_challenged', 'officer_number', 'service_center_or_field_office']
+[rfe] Page 2 → sending...
+[rfe] Page 2 done (6.5s)
+[rfe] Page 2 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'petition_type', 'filing_date']
+[rfe] Page 3 → sending...
+[rfe] Page 3 done (6.7s)
+[rfe] Page 3 → Found: ['rfe_issued', 'rfe_criteria_challenged', 'officer_number']
+[rfe] Page 4 → sending...
+[rfe] Page 4 done (6.6s)
+[rfe] Page 4 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 5 → sending...
+[rfe] Page 5 done (6.5s)
+[rfe] Page 5 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 6 → sending...
+[rfe] Page 6 done (6.5s)
+[rfe] Page 6 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'officer_number', 'endeavor_field']
+[rfe] Page 7 → sending...
+[rfe] Page 7 done (6.7s)
+[rfe] Page 7 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'officer_number']
+[rfe] Page 8 → sending...
+[rfe] Page 8 done (6.7s)
+[rfe] Page 8 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'officer_number']
+[rfe] Page 9 → sending...
+[rfe] Page 9 done (6.5s)
+[rfe] Page 9 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'officer_number', 'high_salary_claimed']
+[rfe] Page 10 → sending...
+[rfe] Page 10 done (6.5s)
+[rfe] Page 10 → Found: ['rfe_issued', 'rfe_criteria_challenged', 'officer_number', 'service_center_or_field_office']
+[rfe] Page 11 → sending...
+[rfe] Page 11 done (8.3s)
+[rfe] Page 11 → Found: ['rfe_issued', 'rfe_date', 'rfe_response_deadline', 'rfe_criteria_challenged', 'service_center_or_field_office', 'petition_type']
+[rfe] Page 12 → sending...
+[rfe] Page 12 done (6.7s)
+[rfe] Page 12 → Found: ['rfe_issued', 'rfe_date', 'rfe_basis', 'rfe_criteria_challenged', 'petition_type', 'filing_date']
+[rfe] Page 13 → sending...
+[rfe] Page 13 done (6.2s)
+[rfe] Page 13 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 14 → sending...
+[rfe] Page 14 done (7.7s)
+[rfe] Page 14 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'officer_number']
+[rfe] Page 15 → sending...
+[rfe] Page 15 done (5.9s)
+[rfe] Page 15 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 16 → sending...
+[rfe] Page 16 done (7.0s)
+[rfe] Page 16 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged', 'officer_number', 'endeavor_field']
+[rfe] Page 17 → sending...
+[rfe] Page 17 done (6.4s)
+[rfe] Page 17 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 18 → sending...
+[rfe] Page 18 done (7.0s)
+[rfe] Page 18 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 19 → sending...
+[rfe] Page 19 done (6.7s)
+[rfe] Page 19 → Found: ['rfe_issued', 'rfe_basis', 'rfe_criteria_challenged']
+[rfe] Page 20 → sending...
+[rfe] Page 20 done (6.0s)
+[rfe] Page 20 → Found: ['rfe_issued', 'rfe_criteria_challenged', 'service_center_or_field_office']
+
+RFE RESULT:
+{
+  "rfe_issued": true,
+  "rfe_date": "2022-02-01",
+  "rfe_response_deadline": "2022-04-29",
+  "rfe_criteria_challenged": [],
+  "officer_number": "CSCI129CSCI12000020316612",
+  "service_center_or_field_office": "California Service Center, Laguna Niguel, CA 92677-0590",
+  "rfe_basis": "Evidence insufficient",
+  "petition_type": "O-1B Extraordinary Ability in the Arts",
+  "filing_date": "2022-01-20",
+  "endeavor_field": "Arts",
+  "high_salary_claimed": "N"
+}
+  → processed_applications/application-002: added 'rfe'
+
+=== [application-002] STATS ===
+  Pages processed  : 20
+  Inference time   : 136.8s
+  Input tokens     : 29,106
+  Output tokens    : 4,019
+  New docs saved   : ['rfe']
+
+=== FINAL MERGED RESULT ===
+{
+  "outcome_after_rfe": "denied",
+  "rfe_response_deadline": "2022-04-29",
+  "employer_sponsored": false,
+  "beneficiary_country_of_citizenship": "India",
+  "filing_date": "2023-08-17",
+  "high_salary_claimed": "Y",
+  "self_petition": true,
+  "publications_included": true,
+  "rfe_date": "2022-02-01",
+  "noid_issued": false,
+  "eb2_basis": "Advanced Degree",
+  "judging_others_work_claimed": true,
+  "service_center_or_field_office": "Tempe, AZ",
+  "endeavor_field": "Tech",
+  "included_publications": true,
+  "petition_type": "EB-2 NIW",
+  "major_award_claimed": "Y",
+  "national_importance_framing": "Economic",
+  "criteria_claimed_count": 1,
+  "final_outcome": "Denied",
+  "noid_basis": "No - copy of request attached",
+  "rfe_issued": false,
+  "evidence_of_positioning_present": true,
+  "beneficiary_industry": "Tech",
+  "dhanasar_prong_focus": "Prong 1 | Prong 2 | Prong 3",
+  "premium_processing": "Y",
+  "rfe_basis": "Evidence insufficient",
+  "decision_date": "2022-05-16",
+  "final_merits_determination": "Pass",
+  "rfe_linked_to_evidence_issue": true,
+  "rfe_criteria_challenged": [
+    ""
+  ],
+  "officer_number": "CSCI129CSCI12000020316612",
+  "publication_type": "Books",
+  "beneficiary_country_of_birth": "India",
+  "denial_basis": "WAC2211050544 ",
+  "cell_cited": false,
+  "discretion_applied": false,
+  "noid_linked_to_evidence_issue": false,
+  "basis_for_application": [
+    "Talent Mobility (Education and Technology)"
+  ]
+}
+
+Saving to Firestore...
+  New apps this run: ['application-002']
+Saved → Firestore (run_id=20260430_133558)
+
+[aggregate] Transforming 2 app(s) → aggregated_cases (2 this run + 0 historical)...
+  ✓ aggregated_cases/application-001_20260430_133558
+  ✓ aggregated_cases/application-002_20260430_133558
+[aggregate] Transform done.
+
+[aggregate] Reading aggregated_cases for run 20260430_133558...
+  Found 2 doc(s)
+  Pre-computing 54 filter combination(s)...
+  ✓ 54 slices computed
+  ✓ aggregated_insights/20260430_133558
+[aggregate] Done.
+
+============================================================
+ALL DONE — 2 application(s).
+Log saved → C:\Users\HAMMOUD\Desktop\PipelineScriptsTMF-main\logs\20260430_132511.log
+============================================================
+
+============================================================
+TIMING SUMMARY
+============================================================
+Application        Naming   Parsing
+-----------------------------------
+application-001       18s        0s
+application-002       31s        1s
+-----------------------------------
+Pipeline (all apps)              2m 22s
+TOTAL RUN                    3m 15s
+============================================================

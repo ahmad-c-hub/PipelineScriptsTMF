@@ -1,0 +1,307 @@
+✓ All clients ready.
+  RunPod : https://oybai2nw2091tv-11434.proxy.runpod.net/
+  Model  : qwen2.5:14b-instruct-q8_0
+  GCP    : data-enclave-dev-488920
+============================================================
+STEP 0b: Fetching applications from GCS
+============================================================
+Applications in GCS: application-001, application-002
+Downloading 2 application(s)...
+  [application-001] Downloaded: AH Path O1A USCIS Forms.pdf
+  [application-001] Downloaded: AHUSSAIN_O1A_Petition_Full - CONFIDENTIAL.pdf
+  [application-001] Downloaded: AHussain_O-1_I797A_Approval_Notice.pdf
+  [application-002] Downloaded: Denial Notice.pdf
+  [application-002] Downloaded: FULL O-1A Filing - Balasubramani, Soundarya (1).pdf
+  [application-002] Downloaded: Final NIW Filing.pdf
+  [application-002] Downloaded: RFE.pdf
+
+
+============================================================
+APPLICATION: application-001  (1/2)
+============================================================
+
+[application-001] STEP 1: Naming
+
+[application-001] Found 3 file(s), classifying:
+  AH Path O1A USCIS Forms.pdf  →  petition.pdf
+  AHussain_O-1_I797A_Approval_Notice.pdf  →  decision.pdf
+  AHUSSAIN_O1A_Petition_Full - CONFIDENTIAL.pdf  →  evidence_other_1.pdf
+
+[application-001] STEP 2: Parsing
+
+[application-001] Parsing documents:
+  decision             → 2 pages, 7,016 chars
+  evidence_other_1     → 326 pages, 643,688 chars
+  petition             → 28 pages, 216,713 chars
+
+✓ application-001 prepared — naming 19s, parsing 16s
+
+============================================================
+APPLICATION: application-002  (2/2)
+============================================================
+
+[application-002] STEP 1: Naming
+
+[application-002] Found 4 file(s), classifying:
+  Denial Notice.pdf  →  decision.pdf
+  Final NIW Filing.pdf  →  petition.pdf
+  FULL O-1A Filing - Balasubramani, Soundarya (1).pdf  →  petition_2.pdf
+  RFE.pdf  →  rfe.pdf
+
+[application-002] STEP 2: Parsing
+
+[application-002] Parsing documents:
+  decision             → 12 pages, 38,475 chars
+  petition             → 541 pages, 1,053,110 chars
+  petition_2           → 723 pages, 1,127,412 chars
+  rfe                  → 20 pages, 58,893 chars
+
+✓ application-002 prepared — naming 42s, parsing 1m 48s
+
+============================================================
+STEP 3: Pipeline — 2 application(s)
+============================================================
+
+RUN ID: 20260430_140133
+============================================================
+
+APPLICATION: application-001
+------------------------------------------------------------
+  No prior record — processing all documents.
+
+=== PROCESSING PETITION ===
+[petition] Page 1 → sending...
+[petition] Page 1 done (8.6s)
+[petition] Page 1 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 2 → sending...
+[petition] Page 2 done (6.4s)
+[petition] Page 2 → Found: ['petition_type', 'premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 3 → sending...
+[petition] Page 3 done (9.8s)
+[petition] Page 3 → Found: ['premium_processing', 'employer_sponsored', 'self_petition', 'beneficiary_country_of_birth', 'beneficiary_country_of_citizenship']
+[petition] Page 4 → sending...
+[petition] Page 4 done (6.5s)
+[petition] Page 4 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 5 → sending...
+[petition] Page 5 done (8.2s)
+[petition] Page 5 → Found: ['premium_processing', 'employer_sponsored', 'self_petition', 'beneficiary_industry']
+[petition] Page 6 → sending...
+[petition] Page 6 done (9.4s)
+[petition] Page 6 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 7 → sending...
+[petition] Page 7 done (7.0s)
+[petition] Page 7 → Found: ['premium_processing']
+[petition] Page 8 → sending...
+[petition] Page 8 done (7.7s)
+[petition] Page 8 → Found: ['premium_processing']
+[petition] Page 9 → sending...
+[petition] Page 9 done (5.9s)
+[petition] Page 9 → Found: ['petition_type', 'premium_processing', 'employer_sponsored', 'self_petition', 'beneficiary_industry']
+[petition] Page 10 → sending...
+[petition] Page 10 done (6.3s)
+[petition] Page 10 → Found: ['premium_processing', 'employer_sponsored', 'self_petition', 'noid_issued', 'noid_basis']
+[petition] Page 11 → sending...
+[petition] Page 11 done (6.7s)
+[petition] Page 11 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 12 → sending...
+[petition] Page 12 done (6.9s)
+[petition] Page 12 → Found: ['premium_processing']
+[petition] Page 13 → sending...
+[petition] Page 13 done (7.3s)
+[petition] Page 13 → Found: ['petition_type', 'premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 14 → sending...
+[petition] Page 14 done (5.9s)
+[petition] Page 14 → Found: ['premium_processing']
+[petition] Page 15 → sending...
+[petition] Page 15 done (6.2s)
+[petition] Page 15 → Found: ['premium_processing']
+[petition] Page 16 → sending...
+[petition] Page 16 done (5.2s)
+[petition] Page 16 → Found: ['premium_processing']
+[petition] Page 17 → sending...
+[petition] Page 17 done (6.0s)
+[petition] Page 17 → Found: ['premium_processing']
+[petition] Page 18 → sending...
+[petition] Page 18 done (6.3s)
+[petition] Page 18 → Found: ['premium_processing']
+[petition] Page 19 → sending...
+[petition] Page 19 done (7.1s)
+[petition] Page 19 → Found: ['premium_processing']
+[petition] Page 20 → sending...
+[petition] Page 20 done (5.5s)
+[petition] Page 20 → Found: ['premium_processing']
+[petition] Page 21 → sending...
+[petition] Page 21 done (5.1s)
+[petition] Page 21 → Found: ['premium_processing']
+[petition] Page 22 → sending...
+[petition] Page 22 done (8.0s)
+[petition] Page 22 → Found: ['premium_processing', 'employer_sponsored', 'self_petition']
+[petition] Page 23 → sending...
+[petition] Page 23 done (5.6s)
+[petition] Page 23 → Found: ['premium_processing']
+[petition] Page 24 → sending...
+[petition] Page 24 done (5.5s)
+[petition] Page 24 → Found: ['premium_processing']
+[petition] Page 25 → sending...
+[petition] Page 25 done (6.9s)
+[petition] Page 25 → Found: ['premium_processing']
+[petition] Page 26 → sending...
+[petition] Page 26 done (5.6s)
+[petition] Page 26 → Found: ['premium_processing']
+[petition] Page 27 → sending...
+[petition] Page 27 done (5.8s)
+[petition] Page 27 → Found: ['premium_processing']
+[petition] Page 28 → sending...
+[petition] Page 28 done (8.0s)
+[petition] Page 28 → Found: ['premium_processing']
+
+PETITION RESULT:
+{
+  "premium_processing": "Unknown",
+  "employer_sponsored": true,
+  "self_petition": false,
+  "petition_type": "O-1A Extraordinary Ability",
+  "beneficiary_country_of_birth": "United Kingdom",
+  "beneficiary_country_of_citizenship": "United Kingdom",
+  "beneficiary_industry": "Tech",
+  "noid_issued": false,
+  "noid_basis": "No - copy of request attached"
+}
+  → processed_applications/application-001: added 'petition'
+
+=== PROCESSING DECISION ===
+[decision] Page 1 → sending...
+[decision] Page 1 done (6.2s)
+[decision] Page 1 → Found: ['decision_date', 'final_outcome', 'rfe_issued', 'noid_issued', 'basis_for_approval', 'discretion_applied', 'petition_type', 'filing_date', 'service_center_or_field_office', 'beneficiary_country_of_citizenship']
+[decision] Page 2 → sending...
+[decision] Page 2 done (6.8s)
+[decision] Page 2 → Found: ['decision_date', 'final_outcome', 'rfe_issued', 'noid_issued', 'discretion_applied', 'petition_type', 'filing_date', 'service_center_or_field_office']
+
+DECISION RESULT:
+{
+  "decision_date": "2023-04-25",
+  "final_outcome": "Approved",
+  "rfe_issued": false,
+  "noid_issued": false,
+  "basis_for_approval": "The petition and accompanying request for a change of status have been approved.",
+  "discretion_applied": false,
+  "petition_type": "O-1A",
+  "filing_date": "2022-10-21",
+  "service_center_or_field_office": "Vermont Service Center",
+  "beneficiary_country_of_citizenship": "UNITED KINGDOM"
+}
+  → processed_applications/application-001: added 'decision'
+
+=== PROCESSING EVIDENCE (evidence_other_1) ===
+[evidence] Page 1 → sending...
+[evidence] Page 1 done (4.2s)
+[evidence] Page 1 → Found: ['petition_type']
+[evidence] Page 2 → sending...
+[evidence] Page 2 done (4.0s)
+[evidence] Page 2 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 3 → sending...
+[evidence] Page 3 done (3.5s)
+[evidence] Page 3 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'criteria_claimed_count', 'major_award_claimed', 'high_salary_claimed']
+[evidence] Page 4 → sending...
+[evidence] Page 4 done (3.5s)
+[evidence] Page 4 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 5 → sending...
+[evidence] Page 5 done (3.6s)
+[evidence] Page 5 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 6 → sending...
+[evidence] Page 6 done (4.1s)
+[evidence] Page 6 → Found: ['basis_for_application', 'petition_type', 'major_award_claimed']
+[evidence] Page 7 → sending...
+[evidence] Page 7 done (3.8s)
+[evidence] Page 7 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'judging_others_work_claimed', 'endeavor_field']
+[evidence] Page 8 → sending...
+[evidence] Page 8 done (4.0s)
+[evidence] Page 8 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type']
+[evidence] Page 9 → sending...
+[evidence] Page 9 done (4.6s)
+[evidence] Page 9 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 10 → sending...
+[evidence] Page 10 done (3.3s)
+[evidence] Page 10 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 11 → sending...
+[evidence] Page 11 done (3.4s)
+[evidence] Page 11 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 12 → sending...
+[evidence] Page 12 done (3.0s)
+[evidence] Page 12 → Found: ['petition_type']
+[evidence] Page 13 → sending...
+[evidence] Page 13 done (4.6s)
+[evidence] Page 13 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 14 → sending...
+[evidence] Page 14 done (3.1s)
+[evidence] Page 14 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'judging_others_work_claimed', 'endeavor_field']
+[evidence] Page 15 → sending...
+[evidence] Page 15 done (4.4s)
+[evidence] Page 15 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 16 → sending...
+[evidence] Page 16 done (3.3s)
+[evidence] Page 16 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 17 → sending...
+[evidence] Page 17 done (5.5s)
+[evidence] Page 17 → Found: ['petition_type']
+[evidence] Page 18 → sending...
+[evidence] Page 18 done (4.1s)
+[evidence] Page 18 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 19 → sending...
+[evidence] Page 19 done (3.3s)
+[evidence] Page 19 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 20 → sending...
+[evidence] Page 20 done (4.4s)
+[evidence] Page 20 → Found: ['included_publications', 'publication_type', 'basis_for_application', 'evidence_of_positioning_present', 'beneficiary_industry', 'publications_included_petition']
+[evidence] Page 21 → sending...
+[evidence] Page 21 done (4.2s)
+[evidence] Page 21 → No useful fields
+[evidence] Page 22 → sending...
+[evidence] Page 22 done (4.9s)
+[evidence] Page 22 → No useful fields
+[evidence] Page 23 → sending...
+[evidence] Page 23 done (3.1s)
+[evidence] Page 23 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 24 → sending...
+[evidence] Page 24 done (3.6s)
+[evidence] Page 24 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field', 'national_importance_framing']
+[evidence] Page 25 → sending...
+[evidence] Page 25 done (3.0s)
+[evidence] Page 25 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 26 → sending...
+[evidence] Page 26 done (4.9s)
+[evidence] Page 26 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 27 → sending...
+[evidence] Page 27 done (3.2s)
+[evidence] Page 27 → Found: ['petition_type']
+[evidence] Page 28 → sending...
+[evidence] Page 28 done (5.5s)
+[evidence] Page 28 → Found: ['petition_type']
+[evidence] Page 29 → sending...
+[evidence] Page 29 done (4.1s)
+[evidence] Page 29 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'endeavor_field']
+[evidence] Page 30 → sending...
+[evidence] Page 30 done (3.2s)
+[evidence] Page 30 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'judging_others_work_claimed']
+[evidence] Page 31 → sending...
+[evidence] Page 31 done (4.6s)
+[evidence] Page 31 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 32 → sending...
+[evidence] Page 32 done (3.0s)
+[evidence] Page 32 → Found: ['petition_type']
+[evidence] Page 33 → sending...
+[evidence] Page 33 done (3.5s)
+[evidence] Page 33 → Found: ['petition_type', 'beneficiary_industry']
+[evidence] Page 34 → sending...
+[evidence] Page 34 done (4.1s)
+[evidence] Page 34 → Found: ['petition_type']
+[evidence] Page 35 → sending...
+[evidence] Page 35 done (3.4s)
+[evidence] Page 35 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry', 'high_salary_claimed']
+[evidence] Page 36 → sending...
+[evidence] Page 36 done (3.3s)
+[evidence] Page 36 → Found: ['basis_for_application', 'evidence_of_positioning_present', 'petition_type', 'beneficiary_industry']
+[evidence] Page 37 → sending...
+[evidence] Page 37 done (4.6s)
+[evidence] Page 37 → No useful fields
+[evidence] Page 38 → sending...

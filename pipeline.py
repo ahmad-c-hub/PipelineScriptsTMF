@@ -1,5 +1,6 @@
 
 import re, json, time, os, subprocess, importlib.util, yaml
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from openai import OpenAI
 import ollama
@@ -62,7 +63,8 @@ def build_app_markdowns(app_name, app_folder, skip_doc_types=None):
     skip_doc_types — set of doc types to skip (already in processed_applications)."""
     skip = set(skip_doc_types or [])
     print(f"\n[{app_name}] Parsing documents:")
-    docs_md = {}
+
+    to_parse = []
     for f in sorted(os.listdir(app_folder)):
         if not f.lower().endswith(".pdf"):
             continue
@@ -70,14 +72,26 @@ def build_app_markdowns(app_name, app_folder, skip_doc_types=None):
         if doc_type in skip:
             print(f"  {doc_type:20s} → skipped (already processed)")
             continue
-        pdf_path = os.path.join(app_folder, f)
+        to_parse.append((doc_type, os.path.join(app_folder, f)))
+
+    def _parse(doc_type, pdf_path):
         try:
             md_text = run_parser(pdf_path)
-            docs_md[doc_type] = md_text
-            print(f"  {doc_type:20s} → {md_text.count('## Page')} pages, {len(md_text):,} chars")
+            return doc_type, md_text, None
         except Exception as e:
-            print(f"  {doc_type:20s} → ERROR: {e}")
-            docs_md[doc_type] = None
+            return doc_type, None, e
+
+    docs_md = {}
+    with ThreadPoolExecutor(max_workers=max(1, min(len(to_parse), 4))) as ex:
+        futures = {ex.submit(_parse, dt, p): dt for dt, p in to_parse}
+        for fut in as_completed(futures):
+            doc_type, md_text, err = fut.result()
+            if err:
+                print(f"  {doc_type:20s} → ERROR: {err}")
+                docs_md[doc_type] = None
+            else:
+                print(f"  {doc_type:20s} → {md_text.count('## Page')} pages, {len(md_text):,} chars")
+                docs_md[doc_type] = md_text
     return docs_md
 
 
@@ -163,10 +177,18 @@ def process_document(doc_type, md_text, docs):
     merged = {}
     stats  = {"pages": 0, "time": 0, "input_tokens": 0, "output_tokens": 0}
 
-    for i, page in enumerate(pages, 1):
-        result_text, elapsed, in_tok, out_tok = run_page(prompt, page, i, doc_type)
+    wall_start = time.time()
+    with ThreadPoolExecutor(max_workers=max(1, min(len(pages), 8))) as ex:
+        future_to_idx = {ex.submit(run_page, prompt, page, i, doc_type): i
+                         for i, page in enumerate(pages, 1)}
+        page_results = {}
+        for fut in as_completed(future_to_idx):
+            page_results[future_to_idx[fut]] = fut.result()
+    stats["time"] = time.time() - wall_start
+
+    for i in sorted(page_results):
+        result_text, elapsed, in_tok, out_tok = page_results[i]
         stats["pages"]        += 1
-        stats["time"]         += elapsed
         stats["input_tokens"] += in_tok
         stats["output_tokens"]+= out_tok
 
@@ -278,12 +300,8 @@ def run_pipeline(all_markdowns):
 
     all_results   = {}
     all_app_stats = {}
-    global_stats  = {
-        "total_pages_processed":    0,
-        "total_inference_time_sec": 0,
-        "total_input_tokens":       0,
-        "total_output_tokens":      0,
-    }
+    new_results   = {}
+    new_app_stats = {}
 
     def _accumulate(target, stats):
         target["pages_processed"]    += stats["pages"]
@@ -364,6 +382,7 @@ def run_pipeline(all_markdowns):
         # Derived flags — always from file presence, not LLM output
         final["rfe_linked_to_evidence_issue"]  = any(k.startswith("rfe")  for k in all_known_doc_types)
         final["noid_linked_to_evidence_issue"] = any(k.startswith("noid") for k in all_known_doc_types)
+        final["_doc_types"] = sorted(all_known_doc_types)
 
         all_results[app]   = final
         all_app_stats[app] = app_stats
@@ -379,37 +398,30 @@ def run_pipeline(all_markdowns):
         print("\n=== FINAL MERGED RESULT ===")
         print(json.dumps(final, indent=2))
 
-        for key in ("pages_processed", "inference_time_sec", "input_tokens", "output_tokens"):
-            global_stats[f"total_{key}"] += app_stats[key]
+        if app_stats["pages_processed"] > 0:
+            new_results[app]   = final
+            new_app_stats[app] = app_stats
 
-    # ── Attach doc types (new + previously processed) ─────────
-    for app, docs in all_markdowns.items():
-        if app in all_results:
-            prev = set(get_processed_application(app)["processed_docs"])
-            all_results[app]["_doc_types"] = sorted(prev | set(docs.keys()))
-
-    # ── Only apps with new inference this run ────────────────
-    new_results   = {app: r for app, r in all_results.items()   if all_app_stats[app]["pages_processed"] > 0}
-    new_app_stats = {app: s for app, s in all_app_stats.items() if s["pages_processed"] > 0}
-
-    # ── Save to Firestore ─────────────────────────────────────
-    print("\nSaving to Firestore...")
-    print(f"  New apps this run: {list(new_results.keys()) or 'none'}")
-    firestore_client.collection("insights").document(run_id).set({
-        "run_id":                run_id,
-        "timestamp":             datetime.now(timezone.utc).isoformat(),
-        "model":                 RUNPOD_MODEL,
-        "applications":          new_results,
-        "total_fields_extracted": sum(len(v) for v in new_results.values()),
-    })
-    firestore_client.collection("inference_logs").document(run_id).set({
-        "run_id": run_id,
-        **global_stats,
-        "applications": new_app_stats,
-    })
-    print(f"Saved → Firestore (run_id={run_id})")
+            print(f"\nSaving [{app}] to Firestore...")
+            firestore_client.collection("insights").document(run_id).set({
+                "run_id":                 run_id,
+                "timestamp":              datetime.now(timezone.utc).isoformat(),
+                "model":                  RUNPOD_MODEL,
+                "applications":           new_results,
+                "total_fields_extracted": sum(len(v) for v in new_results.values()),
+            })
+            firestore_client.collection("inference_logs").document(run_id).set({
+                "run_id":                   run_id,
+                "total_pages_processed":    sum(s["pages_processed"]    for s in new_app_stats.values()),
+                "total_inference_time_sec": sum(s["inference_time_sec"] for s in new_app_stats.values()),
+                "total_input_tokens":       sum(s["input_tokens"]       for s in new_app_stats.values()),
+                "total_output_tokens":      sum(s["output_tokens"]      for s in new_app_stats.values()),
+                "applications":             new_app_stats,
+            })
+            print(f"  ✓ Saved → Firestore (run_id={run_id})")
 
     # ── Transform + Aggregate ─────────────────────────────────
+    print(f"\nNew apps this run: {list(new_results.keys()) or 'none'}")
     spec = importlib.util.spec_from_file_location("aggregate", os.path.join(BASE_DIR, "aggregate.py"))
     agg  = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(agg)

@@ -89,6 +89,7 @@ The LLM reads the raw filenames and maps each PDF to a standard document type, t
 | Standard name | Description |
 |---|---|
 | `petition.pdf` | Main petition form (I-129, I-140, NIW filing) |
+| `petition_2.pdf` | Second petition file, if two are present in the folder |
 | `decision.pdf` | USCIS decision notice (approval or denial) |
 | `rfe.pdf` | Request for Evidence |
 | `rfe_response.pdf` | Applicant's RFE response |
@@ -97,6 +98,8 @@ The LLM reads the raw filenames and maps each PDF to a standard document type, t
 | `evidence_letter_1.pdf` | Expert / recommendation letters (numbered) |
 | `evidence_publication_1.pdf` | Journal articles, papers (numbered) |
 | `evidence_other_1.pdf` | Awards, pay stubs, patents, etc. (numbered) |
+
+> **Duplicate single-type docs:** For `petition`, `decision`, `rfe`, `rfe_response`, `noid`, and `noid_response` — if two files are classified as the same type, the second is renamed with a `_2` suffix (e.g. `petition_2.pdf`). Evidence files are always numbered sequentially (`_1`, `_2`, …) regardless.
 
 ### Step 2 — Parsing (`pipeline.py → build_app_markdowns`)
 
